@@ -101,10 +101,17 @@ export function WhyUs() {
         </FadeUp>
       </Container>
 
-      {/* Tall scroll driver — pinned viewport inside */}
+      {/* Mobile: simple vertical stack (no pinned animation) */}
+      <Container className="md:hidden mt-10 space-y-6">
+        {ROWS.map((row) => (
+          <StaticCard key={row.no} row={row} pick={pick} />
+        ))}
+      </Container>
+
+      {/* Desktop: tall scroll driver — pinned viewport inside */}
       <div
         ref={sectionRef}
-        className="relative"
+        className="relative hidden md:block"
         style={{ height: sectionHeight }}
       >
         <div className="sticky top-0 h-screen flex items-center overflow-hidden">
@@ -217,5 +224,39 @@ function StackCard({
         </div>
       </div>
     </motion.div>
+  );
+}
+
+function StaticCard({
+  row,
+  pick,
+}: {
+  row: (typeof ROWS)[number];
+  pick: ReturnType<typeof useI18n>["pick"];
+}) {
+  const i = ROWS.indexOf(row);
+  return (
+    <div className="rounded-[1.5rem] bg-paper p-6 shadow-card border border-ink/5 space-y-5">
+      <div className="relative overflow-hidden rounded-2xl shadow-card">
+        <SafeImage src={STOCK.whyUs[i]} alt={pick(row.title)} ratio="4/3" className="w-full h-full" />
+      </div>
+      <span className="inline-flex items-center justify-center h-11 w-11 rounded-full bg-burgundy-700 text-gold-500 font-bebas tracking-wider text-sm">
+        {row.no}
+      </span>
+      <h3 className="font-display text-2xl text-ink leading-tight tracking-tight">
+        {pick(row.title)}
+      </h3>
+      <p className="text-ink/65 leading-relaxed">{pick(row.body)}</p>
+      <ul className="space-y-2.5">
+        {row.bullets.map((b, j) => (
+          <li key={j} className="flex items-start gap-3 text-sm text-ink">
+            <span className="grid h-5 w-5 shrink-0 mt-0.5 place-items-center rounded-full bg-gold-500 text-burgundy-900">
+              <Check size={12} strokeWidth={3} />
+            </span>
+            {pick(b)}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
