@@ -70,12 +70,13 @@ export function PopupForm({
               />
             </Dialog.Overlay>
             <Dialog.Content asChild>
+              <div className="fixed inset-0 z-[90] grid place-items-center p-4 pointer-events-none">
               <motion.div
                 initial={{ opacity: 0, y: 24, scale: 0.98 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 12, scale: 0.98 }}
                 transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                className="fixed left-1/2 top-1/2 z-[90] w-[min(560px,calc(100vw-2rem))] max-h-[92dvh] overflow-y-auto -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-paper p-6 md:p-8 shadow-card outline-none"
+                className="pointer-events-auto w-[min(560px,100%)] max-h-[92dvh] overflow-y-auto rounded-3xl bg-paper p-6 md:p-8 shadow-card outline-none"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="space-y-2">
@@ -176,6 +177,7 @@ export function PopupForm({
                   </noscript>
                 </form>
               </motion.div>
+              </div>
             </Dialog.Content>
           </Dialog.Portal>
         )}

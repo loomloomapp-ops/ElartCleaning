@@ -36,8 +36,8 @@ export function Header() {
           className={cn(
             "fixed top-0 left-0 right-0 z-50 transition-colors duration-300",
             scrolled
-              ? "bg-paper/92 backdrop-blur-md border-b border-ink/8 shadow-[0_8px_30px_-20px_rgba(74,0,15,0.25)]"
-              : "bg-paper/80 backdrop-blur-md border-b border-transparent",
+              ? "bg-paper border-b border-ink/8 shadow-[0_8px_30px_-20px_rgba(74,0,15,0.25)]"
+              : "bg-paper/85 backdrop-blur-md border-b border-transparent",
           )}
         >
           <div className="mx-auto max-w-container px-5 md:px-8 lg:px-10">

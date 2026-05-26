@@ -1,5 +1,7 @@
 "use client";
 
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Container } from "@/components/primitives";
 import { SafeImage } from "@/components/primitives/SafeImage";
 import { FadeUp } from "@/components/motion";
@@ -9,14 +11,26 @@ import { STOCK } from "@/lib/stock";
 
 /**
  * Replica of Cleaningflow booking-section — full-bleed bg image with
- * dark gradient overlay, centered single H2 + CTA button.
+ * dark gradient overlay, centered single H2 + CTA button. Background photo
+ * has scroll-driven parallax (slower vertical drift than page scroll).
  */
 export function BookingBanner() {
   const { pick } = useI18n();
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+  // Parallax: image translates -15% to +15% across full traversal of section.
+  const y = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1.18, 1.18]);
+
   return (
-    <section className="relative isolate overflow-hidden">
+    <section ref={sectionRef} className="relative isolate overflow-hidden">
       <div className="absolute inset-0 -z-10">
-        <SafeImage src={STOCK.cta.primary} alt="" className="absolute inset-0 w-full h-full" />
+        <motion.div style={{ y, scale }} className="absolute inset-0 will-change-transform">
+          <SafeImage src={STOCK.cta.primary} alt="" className="absolute inset-0 w-full h-full" />
+        </motion.div>
         <div className="absolute inset-0 bg-burgundy-900/85" />
         <div
           aria-hidden

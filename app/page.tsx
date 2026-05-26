@@ -21,7 +21,7 @@ export default function HomePage() {
   return (
     <>
       <Header />
-      <main className="overflow-x-hidden">
+      <main className="overflow-x-clip">
         {/* 1 — Hero slider (3 slides, auto-play) */}
         <HeroSlider />
 

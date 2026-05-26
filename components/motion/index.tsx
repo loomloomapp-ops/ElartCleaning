@@ -5,6 +5,16 @@ import * as React from "react";
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
+const motionCache = new Map<string, any>();
+function getMotion(tag: string) {
+  let M = motionCache.get(tag);
+  if (!M) {
+    M = motion(tag as any);
+    motionCache.set(tag, M);
+  }
+  return M;
+}
+
 export function FadeUp({
   children,
   delay = 0,
@@ -16,7 +26,7 @@ export function FadeUp({
   className?: string;
   as?: keyof JSX.IntrinsicElements;
 }) {
-  const MotionAs = motion(As as any);
+  const MotionAs = getMotion(As as string);
   return (
     <MotionAs
       initial={{ opacity: 0, y: 18 }}

@@ -122,22 +122,22 @@ export function Plans() {
         <FadeUp className="space-y-6">
           <p className="text-sm text-ink/60 max-w-3xl mx-auto text-center">{pick(PRICES_NOTE)}</p>
           <div className="rounded-[1.5rem] border border-ink/8 bg-cream p-6 md:p-8">
-            <p className="font-bebas tracking-[0.2em] text-burgundy-700 text-xs uppercase mb-4">
+            <p className="text-sm font-semibold tracking-wide text-burgundy-700 uppercase mb-5">
               {pick({ pl: "Pełen cennik", en: "Full pricelist" })}
             </p>
             <ul className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
               {PRICES.map((p) => (
                 <li
                   key={p.key}
-                  className="rounded-2xl bg-paper border border-ink/8 p-4 hover:border-burgundy-700/30 transition"
+                  className="rounded-2xl bg-paper border border-ink/8 p-5 hover:border-burgundy-700/30 transition"
                 >
-                  <p className="text-xs font-bebas tracking-[0.18em] text-burgundy-700">
+                  <p className="text-sm font-semibold text-burgundy-700 leading-snug">
                     {pick(p.title)}
                   </p>
-                  <p className="mt-1 font-display text-xl text-ink tabular-nums leading-none">
+                  <p className="mt-2 text-2xl font-semibold text-ink tabular-nums leading-tight">
                     {pick(p.price)}
                   </p>
-                  <p className="mt-2 text-xs text-ink/60 leading-relaxed">{pick(p.note)}</p>
+                  <p className="mt-2 text-sm text-ink/65 leading-relaxed">{pick(p.note)}</p>
                 </li>
               ))}
             </ul>
