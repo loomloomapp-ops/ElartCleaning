@@ -26,7 +26,9 @@ const FLOATING_BY_SLUG: Record<string, [string, string, string]> = {
   biura: [STOCK.services.biura, STOCK.services["po-remoncie"], STOCK.services.abonament],
   tapicerka: [STOCK.services.tapicerka, STOCK.services.dywany, STOCK.services.mieszkania],
   dywany: [STOCK.services.dywany, STOCK.services.tapicerka, STOCK.services.mieszkania],
+  okna: [STOCK.services.okna, STOCK.services.biura, STOCK.services.mieszkania],
   transport: [STOCK.services.transport, STOCK.services.domy, STOCK.services.abonament],
+  magazyn: [STOCK.services.magazyn, STOCK.services.transport, STOCK.services.domy],
   abonament: [STOCK.services.abonament, STOCK.services.biura, STOCK.services.mieszkania],
 };
 

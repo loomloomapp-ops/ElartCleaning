@@ -139,6 +139,15 @@ export const SERVICES = [
     ribbon: t("Dywany", "Carpets"),
   },
   {
+    slug: "okna",
+    title: t("Mycie okien", "Window cleaning"),
+    description: t(
+      "Okna prywatne, komercyjne, fasady i praca na wysokości z podnośnikiem. Bez smug i bez kompromisów.",
+      "Private and commercial windows, façades and high-altitude work with a boom lift. Streak-free, no compromises.",
+    ),
+    ribbon: t("Okna", "Windows"),
+  },
+  {
     slug: "transport",
     title: t("Transport przeprowadzkowy", "Moving transport"),
     description: t(
@@ -146,6 +155,15 @@ export const SERVICES = [
       "Furniture and goods transport, assembly, protective materials included.",
     ),
     ribbon: t("Przeprowadzki", "Moving"),
+  },
+  {
+    slug: "magazyn",
+    title: t("Magazynowanie", "Storage"),
+    description: t(
+      "Obiekt strzeżony i ogrzewany — przechowywanie mebli, towarów oraz materiałów budowlanych.",
+      "Guarded, heated facility — storage for furniture, goods and construction materials.",
+    ),
+    ribbon: t("Magazyn", "Storage"),
   },
   {
     slug: "abonament",
@@ -200,6 +218,12 @@ export const PRICES = [
     title: t("Transport przeprowadzkowy", "Moving transport"),
     price: t("wycena indywidualna", "individual quote"),
     note: t("Poznań i cała Polska", "Poznań and all of Poland"),
+  },
+  {
+    key: "storage",
+    title: t("Magazynowanie", "Storage"),
+    price: t("wycena indywidualna", "individual quote"),
+    note: t("obiekt strzeżony i ogrzewany", "guarded and heated facility"),
   },
   {
     key: "subscription",
@@ -313,7 +337,9 @@ export const QUIZ = {
         t("Sprzątanie po remoncie", "Post-renovation cleaning"),
         t("Sprzątanie biura / lokalu", "Office / commercial cleaning"),
         t("Pranie tapicerki", "Upholstery washing"),
+        t("Mycie okien", "Window cleaning"),
         t("Transport przeprowadzkowy", "Moving transport"),
+        t("Magazynowanie", "Storage"),
         t("Inne", "Other"),
       ],
     },

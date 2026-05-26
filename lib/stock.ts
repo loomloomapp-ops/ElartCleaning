@@ -30,7 +30,9 @@ export const STOCK = {
     biura: "/cleaning/service-office.jpg",
     tapicerka: "/cleaning/service-upholstery.jpg",
     dywany: "/cleaning/service-carpet.jpg",
+    okna: "/cleaning/cat-polishing.avif",
     transport: "/cleaning/service-moving.jpg",
+    magazyn: "/cleaning/about-extra.avif",
     abonament: "/cleaning/service-subscription.jpg",
   },
 
