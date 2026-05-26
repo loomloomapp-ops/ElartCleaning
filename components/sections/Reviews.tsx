@@ -139,26 +139,16 @@ function VideoCard({ url, idx }: { url: string; idx: number }) {
 export function Reviews() {
   const { pick } = useI18n();
   return (
-    <section id="opinie" className="bg-paper py-28 md:py-40">
-      <Container className="space-y-14 md:space-y-16">
+    <section id="opinie" className="bg-paper py-28 md:py-40 lg:py-48">
+      <Container className="space-y-16 md:space-y-20">
         <SectionHeading
           eyebrow={pick(HEADINGS.reviews)}
           title={pick(HEADINGS.reviews)}
-          aside={
-            <a
-              href={BRAND.instagram}
-              target="_blank"
-              rel="noopener"
-              className="inline-flex items-center gap-2 text-sm text-ink/70 hover:text-burgundy-700 transition"
-            >
-              <Instagram size={16} /> @elart_cleaning
-            </a>
-          }
           subtitle={pick(HEADINGS.reviewsSub)}
         />
 
-        <Tabs.Root defaultValue="photos">
-          <Tabs.List className="inline-flex rounded-full border border-ink/10 bg-cream p-1">
+        <Tabs.Root defaultValue="photos" className="flex flex-col items-center">
+          <Tabs.List className="inline-flex rounded-full bg-cream p-1">
             <Tabs.Trigger
               value="photos"
               className="rounded-full px-5 py-2 text-sm font-medium text-ink/65 transition data-[state=active]:bg-burgundy-700 data-[state=active]:text-paper"
@@ -173,7 +163,7 @@ export function Reviews() {
             </Tabs.Trigger>
           </Tabs.List>
 
-          <Tabs.Content value="photos" className="mt-8 focus:outline-none">
+          <Tabs.Content value="photos" className="mt-10 focus:outline-none w-full">
             <FadeUp className="grid md:grid-cols-3 gap-4 md:gap-6">
               <PhotoCard asset={ASSETS.reviewPhotos[0]} quote={SAMPLE_QUOTES[0]} emphasis />
               <PhotoCard asset={ASSETS.reviewPhotos[1]} quote={SAMPLE_QUOTES[1]} />
@@ -192,13 +182,24 @@ export function Reviews() {
             </FadeUp>
           </Tabs.Content>
 
-          <Tabs.Content value="videos" className="mt-8 focus:outline-none">
+          <Tabs.Content value="videos" className="mt-10 focus:outline-none w-full">
             <FadeUp className="grid md:grid-cols-2 gap-4 md:gap-6">
               <VideoCard url={ASSETS.reviewVideos[0]} idx={0} />
               <VideoCard url={ASSETS.reviewVideos[1]} idx={1} />
             </FadeUp>
           </Tabs.Content>
         </Tabs.Root>
+
+        <div className="flex justify-center">
+          <a
+            href={BRAND.instagram}
+            target="_blank"
+            rel="noopener"
+            className="inline-flex items-center gap-2 text-sm text-ink/60 hover:text-burgundy-700 transition"
+          >
+            <Instagram size={16} /> @elart_cleaning
+          </a>
+        </div>
       </Container>
     </section>
   );

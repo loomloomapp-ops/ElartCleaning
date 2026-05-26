@@ -77,12 +77,12 @@ export function BeforeAfter() {
   return (
     <section id="efekty" className="bg-cream py-24 md:py-32">
       <Container className="space-y-12">
-        <div className="flex items-end justify-between gap-8 flex-wrap">
-          <SectionHeading
-            eyebrow={pick(HEADINGS.cases)}
-            title={pick(HEADINGS.cases)}
-            subtitle={pick(HEADINGS.casesSub)}
-          />
+        <SectionHeading
+          eyebrow={pick(HEADINGS.cases)}
+          title={pick(HEADINGS.cases)}
+          subtitle={pick(HEADINGS.casesSub)}
+        />
+        <div className="flex justify-center">
           <WhatsAppCta size="md" label={pick(UI.iWantThis)} />
         </div>
 

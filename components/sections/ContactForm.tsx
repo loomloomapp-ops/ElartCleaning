@@ -56,6 +56,7 @@ export function ContactForm() {
             title={pick(HEADINGS.contact)}
             subtitle={pick(HEADINGS.contactSub)}
             tone="white"
+            align="left"
           />
           <GoldDivider />
 

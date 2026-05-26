@@ -16,6 +16,10 @@ export function Container({
   );
 }
 
+/**
+ * Sparkles-style label pill: small filled rounded chip with a leading dot.
+ * Replaces the old uppercase letter-spaced eyebrow.
+ */
 export function Eyebrow({
   children,
   className,
@@ -23,18 +27,35 @@ export function Eyebrow({
 }: {
   children: React.ReactNode;
   className?: string;
-  tone?: "gold" | "white" | "ink";
+  /** gold: gold bg, burgundy text (use on light bg) | white: paper bg, burgundy text | ink: same | dark: burgundy bg, gold text (use on light) */
+  tone?: "gold" | "white" | "ink" | "dark";
 }) {
+  const styles =
+    tone === "gold"
+      ? "bg-gold-500 text-burgundy-900"
+      : tone === "dark"
+      ? "bg-burgundy-700 text-gold-500"
+      : tone === "white"
+      ? "bg-paper/15 text-paper backdrop-blur"
+      : "bg-burgundy-700/8 text-burgundy-700";
+  const dot =
+    tone === "gold"
+      ? "bg-burgundy-900"
+      : tone === "dark"
+      ? "bg-gold-500"
+      : tone === "white"
+      ? "bg-gold-500"
+      : "bg-burgundy-700";
+
   return (
     <span
       className={cn(
-        "font-bebas tracking-[0.22em] text-xs md:text-sm uppercase",
-        tone === "gold" && "text-gold-500",
-        tone === "white" && "text-paper/80",
-        tone === "ink" && "text-ink/70",
+        "inline-flex items-center gap-2 rounded-[12px] px-3 h-7 text-[11px] font-semibold tracking-[0.01em]",
+        styles,
         className,
       )}
     >
+      <span className={cn("h-1.5 w-1.5 rounded-full", dot)} aria-hidden />
       {children}
     </span>
   );
@@ -44,7 +65,7 @@ export function SectionHeading({
   eyebrow,
   title,
   subtitle,
-  align = "left",
+  align = "center",
   tone = "ink",
   className,
   aside,
@@ -52,67 +73,60 @@ export function SectionHeading({
   eyebrow?: React.ReactNode;
   title: React.ReactNode;
   subtitle?: React.ReactNode;
+  /** Default centered (sparkles pattern). Use "left" for editorial split with aside. */
   align?: "left" | "center";
   tone?: "ink" | "white";
   className?: string;
-  /** Optional secondary copy rendered as an editorial right column on lg+ */
+  /** Optional secondary copy rendered as an editorial right column on lg+ (forces align=left) */
   aside?: React.ReactNode;
 }) {
   const isWhite = tone === "white";
   const heading = isWhite ? "text-paper" : "text-ink";
-  const sub = isWhite ? "text-paper/75" : "text-ink/65";
-  const dot = isWhite ? "bg-gold-500" : "bg-burgundy-700";
+  const sub = isWhite ? "text-paper/70" : "text-ink/60";
 
-  const headerCol = (
-    <div className={cn("flex flex-col gap-5", align === "center" && "items-center text-center")}>
-      {eyebrow ? (
-        <span
-          className={cn(
-            "inline-flex items-center gap-2.5 font-bebas tracking-[0.24em] text-xs md:text-sm uppercase",
-            isWhite ? "text-gold-500" : "text-burgundy-700",
-          )}
-        >
-          <span className={cn("h-1.5 w-1.5 rounded-full", dot)} />
-          {eyebrow}
-        </span>
-      ) : null}
-      <h2
-        className={cn(
-          "font-display font-medium leading-[1.02] tracking-tight text-balance",
-          "text-[clamp(2.25rem,5vw,4.25rem)] max-w-3xl",
-          heading,
-        )}
-      >
-        {title}
-      </h2>
-      {subtitle && align === "center" ? (
-        <p className={cn("text-base md:text-lg leading-relaxed max-w-2xl mx-auto", sub)}>
-          {subtitle}
-        </p>
-      ) : null}
-    </div>
+  // Heading clamp tuned to sparkles ~h2 5rem desktop, 3rem mobile
+  const h2Cls = cn(
+    "font-display font-medium leading-[0.98] tracking-[-0.025em] text-balance",
+    "text-[clamp(2.4rem,5.6vw,4.75rem)]",
+    heading,
   );
 
-  // Editorial split: heading on the left, supporting copy on the right (lg+)
-  if (aside && align === "left") {
+  // Aside layout overrides align
+  if (aside) {
     return (
       <div className={cn("grid lg:grid-cols-[1.4fr_1fr] gap-8 lg:gap-16 items-end", className)}>
-        {headerCol}
+        <div className="flex flex-col gap-5">
+          {eyebrow ? <Eyebrow tone={isWhite ? "white" : "dark"}>{eyebrow}</Eyebrow> : null}
+          <h2 className={cn(h2Cls, "max-w-3xl")}>{title}</h2>
+        </div>
         <div className={cn("space-y-4 max-w-md lg:pb-2", sub)}>
           {aside}
-          {subtitle ? (
-            <p className="text-base md:text-lg leading-relaxed">{subtitle}</p>
-          ) : null}
+          {subtitle ? <p className="text-base md:text-lg leading-relaxed">{subtitle}</p> : null}
         </div>
       </div>
     );
   }
 
   return (
-    <div className={cn("flex flex-col gap-5 max-w-3xl", align === "center" && "mx-auto", className)}>
-      {headerCol}
-      {subtitle && align !== "center" ? (
-        <p className={cn("text-base md:text-lg leading-relaxed max-w-2xl", sub)}>{subtitle}</p>
+    <div
+      className={cn(
+        "flex flex-col gap-6",
+        align === "center" ? "items-center text-center mx-auto max-w-3xl" : "max-w-3xl",
+        className,
+      )}
+    >
+      {eyebrow ? <Eyebrow tone={isWhite ? "white" : "dark"}>{eyebrow}</Eyebrow> : null}
+      <h2 className={h2Cls}>{title}</h2>
+      {subtitle ? (
+        <p
+          className={cn(
+            "text-base md:text-lg leading-relaxed max-w-2xl",
+            sub,
+            align === "center" && "mx-auto",
+          )}
+        >
+          {subtitle}
+        </p>
       ) : null}
     </div>
   );

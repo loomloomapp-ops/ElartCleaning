@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
-import { Container } from "@/components/primitives";
+import { Container, SectionHeading } from "@/components/primitives";
 import { FadeUp, StaggerGroup, StaggerItem } from "@/components/motion";
 import { PLAN_TIERS, PRICES_NOTE, PRICES, HEADINGS, UI } from "@/lib/content";
 import { useI18n } from "@/lib/i18n";
@@ -15,27 +15,17 @@ import { cn } from "@/lib/utils";
 export function Plans() {
   const { pick } = useI18n();
   return (
-    <section id="cennik" className="bg-paper py-28 md:py-40">
-      <Container className="space-y-14 md:space-y-20">
-        {/* Editorial intro band */}
+    <section id="cennik" className="bg-paper py-28 md:py-40 lg:py-48">
+      <Container className="space-y-16 md:space-y-24">
         <FadeUp>
-          <div className="grid lg:grid-cols-[1.4fr_1fr] gap-8 lg:gap-16 items-end">
-            <div className="space-y-5">
-              <span className="inline-flex items-center gap-2.5 font-bebas tracking-[0.24em] text-xs md:text-sm uppercase text-burgundy-700">
-                <span className="h-1.5 w-1.5 rounded-full bg-burgundy-700" />
-                {pick(HEADINGS.prices)}
-              </span>
-              <h2 className="font-display font-medium leading-[1.02] tracking-tight text-balance text-ink text-[clamp(2.25rem,5vw,4.25rem)] max-w-2xl">
-                {pick(HEADINGS.plans)}
-              </h2>
-            </div>
-            <p className="text-ink/65 leading-relaxed text-base md:text-lg max-w-md lg:pb-2">
-              {pick({
-                pl: "Trzy progi do wyboru — od ekspresowego odświeżenia po pełną opiekę. Każda wycena dopasowana do metrażu i stanu.",
-                en: "Three tiers to choose from — from express refresh to full care. Each quote is tailored to area and condition.",
-              })}
-            </p>
-          </div>
+          <SectionHeading
+            eyebrow={pick(HEADINGS.prices)}
+            title={pick(HEADINGS.plans)}
+            subtitle={pick({
+              pl: "Trzy progi do wyboru — od ekspresowego odświeżenia po pełną opiekę. Każda wycena dopasowana do metrażu i stanu.",
+              en: "Three tiers to choose from — from express refresh to full care. Each quote is tailored to area and condition.",
+            })}
+          />
         </FadeUp>
 
         {/* 3 cards */}
@@ -46,19 +36,15 @@ export function Plans() {
               <StaggerItem key={p.key}>
                 <div
                   className={cn(
-                    "group h-full rounded-[1.5rem] overflow-hidden flex flex-col border transition-all duration-500",
-                    hl
-                      ? "border-burgundy-700 bg-paper shadow-card md:scale-[1.04]"
-                      : "border-ink/10 bg-paper hover:-translate-y-1 hover:shadow-card hover:border-burgundy-700/30",
+                    "group h-full rounded-[1.5rem] overflow-hidden flex flex-col transition-all duration-500",
+                    hl ? "bg-burgundy-900 text-paper md:scale-[1.03]" : "bg-cream text-ink hover:-translate-y-1",
                   )}
                 >
                   {/* Header */}
                   <div
                     className={cn(
-                      "p-6 md:p-7",
-                      hl
-                        ? "bg-burgundy-700 text-paper"
-                        : "bg-cream text-ink border-b border-ink/8",
+                      "p-8 md:p-10",
+                      hl ? "text-paper" : "text-ink",
                     )}
                   >
                     <h3
@@ -75,20 +61,30 @@ export function Plans() {
                   </div>
 
                   {/* Body */}
-                  <div className="p-6 md:p-7 flex flex-col gap-6 grow">
+                  <div className="px-8 pb-8 md:px-10 md:pb-10 flex flex-col gap-7 grow">
                     <div className="flex items-baseline gap-2 flex-wrap">
-                      <span className="font-display text-4xl md:text-5xl text-burgundy-700 leading-none tabular-nums">
+                      <span
+                        className={cn(
+                          "font-display font-medium leading-none tabular-nums tracking-[-0.03em] text-[clamp(2.5rem,4.5vw,3.5rem)]",
+                          hl ? "text-gold-500" : "text-burgundy-700",
+                        )}
+                      >
                         {pick(p.price).split(" ")[0]}
                       </span>
-                      <span className="text-ink/55 text-sm">
+                      <span className={cn("text-sm", hl ? "text-paper/65" : "text-ink/55")}>
                         {pick(p.price).split(" ").slice(1).join(" ") || pick({ pl: "/ usługa", en: "/ visit" })}
                       </span>
                     </div>
 
-                    <ul className="space-y-3 text-sm text-ink/80 grow">
+                    <ul className={cn("space-y-3 text-sm grow", hl ? "text-paper/85" : "text-ink/75")}>
                       {p.features.map((f, i) => (
                         <li key={i} className="flex items-start gap-3">
-                          <span className="grid h-5 w-5 shrink-0 mt-0.5 place-items-center rounded-full bg-burgundy-700 text-gold-500 text-xs">
+                          <span
+                            className={cn(
+                              "grid h-5 w-5 shrink-0 mt-0.5 place-items-center rounded-full text-xs",
+                              hl ? "bg-gold-500 text-burgundy-900" : "bg-burgundy-700 text-gold-500",
+                            )}
+                          >
                             ✓
                           </span>
                           {pick(f)}
@@ -126,37 +122,30 @@ export function Plans() {
           })}
         </StaggerGroup>
 
-        {/* Note + full pricelist grid */}
-        <FadeUp className="space-y-8">
-          <div className="flex items-end justify-between gap-6 flex-wrap">
-            <div className="space-y-3 max-w-2xl">
-              <span className="inline-flex items-center gap-2.5 font-bebas tracking-[0.24em] text-xs uppercase text-burgundy-700">
-                <span className="h-1.5 w-1.5 rounded-full bg-burgundy-700" />
-                {pick({ pl: "Pełen cennik", en: "Full pricelist" })}
-              </span>
-              <h3 className="font-display text-2xl md:text-3xl text-ink leading-tight">
-                {pick({
-                  pl: "Pojedyncze pozycje i dodatki",
-                  en: "Individual items & add-ons",
-                })}
-              </h3>
-            </div>
-            <p className="text-sm text-ink/60 max-w-md">{pick(PRICES_NOTE)}</p>
-          </div>
+        {/* Full pricelist */}
+        <FadeUp className="space-y-12 pt-8">
+          <SectionHeading
+            eyebrow={pick({ pl: "Pełen cennik", en: "Full pricelist" })}
+            title={pick({
+              pl: "Pojedyncze pozycje i dodatki",
+              en: "Individual items & add-ons",
+            })}
+            subtitle={pick(PRICES_NOTE)}
+          />
 
-          <ul className="grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-ink/8 border border-ink/8 rounded-[1.5rem] overflow-hidden">
+          <ul className="grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-ink/8 rounded-[1.75rem] overflow-hidden">
             {PRICES.map((p) => (
               <li
                 key={p.key}
-                className="bg-paper p-6 hover:bg-cream transition flex flex-col gap-3"
+                className="bg-cream p-7 hover:bg-paper transition flex flex-col gap-3"
               >
                 <p className="text-sm font-semibold text-burgundy-700 leading-snug">
                   {pick(p.title)}
                 </p>
-                <p className="text-2xl font-semibold text-ink tabular-nums leading-tight">
+                <p className="text-3xl font-semibold text-ink tabular-nums leading-tight tracking-[-0.02em]">
                   {pick(p.price)}
                 </p>
-                <p className="text-sm text-ink/65 leading-relaxed mt-auto">{pick(p.note)}</p>
+                <p className="text-sm text-ink/60 leading-relaxed mt-auto">{pick(p.note)}</p>
               </li>
             ))}
           </ul>

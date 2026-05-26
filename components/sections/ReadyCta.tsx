@@ -1,7 +1,7 @@
 "use client";
 
 import { Phone, Mail, MessageCircle, ArrowUpRight } from "lucide-react";
-import { Container } from "@/components/primitives";
+import { Container, SectionHeading } from "@/components/primitives";
 import { FadeUp } from "@/components/motion";
 import { useI18n } from "@/lib/i18n";
 import { BRAND } from "@/lib/constants";
@@ -51,9 +51,9 @@ function ContactRow({
 export function ReadyCta() {
   const { pick, lang } = useI18n();
   return (
-    <section className="bg-paper py-14 md:py-20">
+    <section className="bg-paper py-16 md:py-24">
       <Container>
-        <div className="relative overflow-hidden rounded-[2rem] bg-burgundy-900 text-paper p-10 md:p-16 lg:p-20">
+        <div className="relative overflow-hidden rounded-[2rem] bg-burgundy-900 text-paper p-12 md:p-20 lg:p-28">
           <div
             aria-hidden
             className="absolute inset-0 opacity-[0.12]"
@@ -62,24 +62,19 @@ export function ReadyCta() {
                 "radial-gradient(circle at 90% 30%, rgba(204,177,112,0.6) 0, transparent 40%)",
             }}
           />
-          <FadeUp className="relative grid lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-20 items-end">
-            <div className="space-y-6">
-              <span className="inline-flex items-center gap-2.5 font-bebas tracking-[0.24em] text-xs md:text-sm uppercase text-gold-500">
-                <span className="h-1.5 w-1.5 rounded-full bg-gold-500" />
-                {pick({ pl: "Zacznij z nami", en: "Bring your vision to life" })}
-              </span>
-              <h2 className="font-display font-medium leading-[1.02] tracking-tight text-balance text-[clamp(2.25rem,5vw,4.25rem)] max-w-xl">
-                {pick({ pl: "Gotowy zacząć swój projekt?", en: "Ready to start your project?" })}
-              </h2>
-              <p className="text-paper/70 leading-relaxed max-w-md">
-                {pick({
-                  pl: "Wybierz najwygodniejszy kanał — odpowiadamy w ciągu kilku minut.",
-                  en: "Pick the channel that suits you — we reply within minutes.",
-                })}
-              </p>
-            </div>
+          <FadeUp className="relative space-y-12 md:space-y-16">
+            <SectionHeading
+              tone="white"
+              align="center"
+              eyebrow={pick({ pl: "Zacznij z nami", en: "Bring your vision to life" })}
+              title={pick({ pl: "Gotowy zacząć swój projekt?", en: "Ready to start your project?" })}
+              subtitle={pick({
+                pl: "Wybierz najwygodniejszy kanał — odpowiadamy w ciągu kilku minut.",
+                en: "Pick the channel that suits you — we reply within minutes.",
+              })}
+            />
 
-            <div className="divide-y divide-paper/10 border-y border-paper/10">
+            <div className="mx-auto max-w-2xl divide-y divide-paper/10 border-y border-paper/10">
               <ContactRow
                 href={`mailto:${BRAND.email}`}
                 icon={<Mail size={16} />}

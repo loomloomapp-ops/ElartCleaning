@@ -1,6 +1,6 @@
 "use client";
 
-import { Container } from "@/components/primitives";
+import { Container, SectionHeading } from "@/components/primitives";
 import { SafeImage } from "@/components/primitives/SafeImage";
 import { StaggerGroup, StaggerItem, FadeUp } from "@/components/motion";
 import { CATEGORIES } from "@/lib/content";
@@ -14,30 +14,20 @@ import { useI18n } from "@/lib/i18n";
 export function CategoryStrip() {
   const { pick } = useI18n();
   return (
-    <section className="bg-paper py-16 md:py-24">
-      <Container className="space-y-10 md:space-y-14">
-        {/* Editorial intro band */}
+    <section className="bg-paper py-20 md:py-28 lg:py-36">
+      <Container className="space-y-14 md:space-y-20">
         <FadeUp>
-          <div className="grid lg:grid-cols-[1.4fr_1fr] gap-8 lg:gap-16 items-end">
-            <div className="space-y-5">
-              <span className="inline-flex items-center gap-2.5 font-bebas tracking-[0.24em] text-xs md:text-sm uppercase text-burgundy-700">
-                <span className="h-1.5 w-1.5 rounded-full bg-burgundy-700" />
-                {pick({ pl: "Kategorie", en: "Categories" })}
-              </span>
-              <h2 className="font-display font-medium leading-[1.02] tracking-tight text-balance text-ink text-[clamp(2rem,4.6vw,3.6rem)] max-w-2xl">
-                {pick({
-                  pl: "Każda powierzchnia ma swojego specjalistę.",
-                  en: "Every surface has its specialist.",
-                })}
-              </h2>
-            </div>
-            <p className="text-ink/65 leading-relaxed text-base md:text-lg max-w-md lg:pb-2">
-              {pick({
-                pl: "Mieszkania, biura, samochody, dywany, lokale po remoncie — pełen zakres, jedna ekipa, jeden numer.",
-                en: "Apartments, offices, cars, rugs, post-renovation venues — full scope, one crew, one number.",
-              })}
-            </p>
-          </div>
+          <SectionHeading
+            eyebrow={pick({ pl: "Kategorie", en: "Categories" })}
+            title={pick({
+              pl: "Każda powierzchnia ma swojego specjalistę.",
+              en: "Every surface has its specialist.",
+            })}
+            subtitle={pick({
+              pl: "Mieszkania, biura, samochody, dywany, lokale po remoncie — pełen zakres, jedna ekipa, jeden numer.",
+              en: "Apartments, offices, cars, rugs, post-renovation venues — full scope, one crew, one number.",
+            })}
+          />
         </FadeUp>
 
         <StaggerGroup className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 md:gap-4">
