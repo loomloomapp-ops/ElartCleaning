@@ -1,206 +1,87 @@
 "use client";
 
-import * as React from "react";
-import * as Tabs from "@radix-ui/react-tabs";
-import { Play, Quote, Star, Instagram } from "lucide-react";
-import Image from "next/image";
-import { Container, SectionHeading, Ribbon, Eyebrow } from "@/components/primitives";
-import { SafeImage } from "@/components/primitives/SafeImage";
-import { FadeUp } from "@/components/motion";
-import { HEADINGS, REVIEWS_TABS, UI } from "@/lib/content";
+import { Star } from "lucide-react";
+import { Container, Chip } from "@/components/primitives";
 import { useI18n } from "@/lib/i18n";
-import { ASSETS, BRAND } from "@/lib/constants";
-import { getYouTubeId, cn } from "@/lib/utils";
 
-const SAMPLE_QUOTES = [
-  {
-    name: "Karolina M.",
-    role: { pl: "Mieszkanie 58 m², Jeżyce", en: "Apartment 58 m², Jeżyce" },
-    text: {
-      pl: "Po remoncie nasze mieszkanie wyglądało jak plac budowy. Ekipa Elart zrobiła robotę w 4 godziny — od pyłu nie ma śladu.",
-      en: "After renovation our flat looked like a construction site. Elart did the job in 4 hours — no dust left at all.",
-    },
-  },
-  {
-    name: "Mateusz Z.",
-    role: { pl: "Salon kosmetyczny, Wilda", en: "Beauty salon, Wilda" },
-    text: {
-      pl: "Sprzątają u nas co tydzień. Punktualnie, dyskretnie, faktura na firmę. Klientki same komentują, że jest świeżo.",
-      en: "They clean us weekly. On time, discreet, invoice issued. Our clients themselves comment how fresh it feels.",
-    },
-  },
-  {
-    name: "Anna K.",
-    role: { pl: "Pranie narożnika", en: "Corner sofa washing" },
-    text: {
-      pl: "Pies, dzieci, 5 lat plam. Narożnik wygląda jak nowy. Suszenie w cenie, więc wieczorem już siadaliśmy.",
-      en: "Dog, kids, 5 years of stains. The sofa looks brand new. Drying included, we sat on it the same evening.",
-    },
-  },
+const REVIEWS_PL = [
+  { name: "Anna K.", role: "Mieszkanie · Jeżyce", text: "Cudowna ekipa! Po remoncie zostawili mieszkanie idealne — żadnego pyłu, podłogi błyszczą, okna jak nowe." },
+  { name: "Paweł M.", role: "Biuro · Centrum", text: "Stała współpraca od roku. Zawsze punktualnie, dokładnie i z fakturą. Polecam każdej firmie." },
+  { name: "Karolina W.", role: "Sofa · Grunwald", text: "Pranie narożnika i materacy — wynik wow. Suszenie w cenie, brak zapachu wilgoci. Profesjonaliści." },
+  { name: "Marek P.", role: "Dom · Naramowice", text: "Generalne sprzątanie po imprezie. Przyjechali we dwie, w 4h dom był nie do poznania. Szacunek." },
+  { name: "Joanna L.", role: "Przeprowadzka", text: "Pomogli ze spakowaniem i transportem. Bardzo kulturalna ekipa, nic nie zostało zniszczone." },
+  { name: "Tomasz S.", role: "Salon kosmetyczny", text: "Sprzątanie cykliczne — zawsze ta sama, sprawdzona ekipa. Klientki zauważają różnicę." },
+  { name: "Magda B.", role: "Mieszkanie · Wilda", text: "Komunikacja na medal, wycena szybka, efekt jeszcze lepszy. Zamawiam co dwa tygodnie." },
+  { name: "Krzysztof D.", role: "Okna · Stary Rynek", text: "Mycie 24 okien w kamienicy. Z drabiny, dokładnie, bez smug. Naprawdę polecam." },
+  { name: "Ola T.", role: "Dywan + materace", text: "Stary dywan dziadka — myślałam że do wyrzucenia. Wrócił jak nowy. Czary." },
 ];
 
-function PhotoCard({
-  asset,
-  quote,
-  emphasis = false,
-}: {
-  asset: string;
-  quote: (typeof SAMPLE_QUOTES)[number];
-  emphasis?: boolean;
-}) {
-  const { pick } = useI18n();
-  return (
-    <div
-      className={cn(
-        "group relative overflow-hidden rounded-3xl border bg-paper transition-all duration-500 hover:-translate-y-1 hover:shadow-card",
-        emphasis ? "border-gold-500/40" : "border-ink/8",
-      )}
-    >
-      <div className="relative" style={{ aspectRatio: "4/5" }}>
-        <SafeImage src={asset} alt={quote.name} ratio="4/5" className="absolute inset-0 w-full h-full" />
-
-        <div className="absolute top-4 left-4">
-          <Ribbon variant="burgundy">Real Client · Poznań</Ribbon>
-        </div>
-        <div className="absolute top-4 right-4 grid h-10 w-10 place-items-center rounded-full bg-gold-500 text-burgundy-900">
-          <Quote size={16} strokeWidth={2.2} />
-        </div>
-
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-burgundy-900/85 via-burgundy-900/30 to-transparent" />
-        <div className="absolute left-5 right-5 bottom-5 text-paper">
-          <div className="flex gap-1 mb-2">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Star key={i} size={14} className="fill-gold-500 text-gold-500" />
-            ))}
-          </div>
-          <p className="text-sm md:text-base leading-snug line-clamp-3">{pick(quote.text)}</p>
-          <p className="mt-2 text-xs text-paper/75">
-            <span className="font-medium">{quote.name}</span> · {pick(quote.role)}
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function VideoCard({ url, idx }: { url: string; idx: number }) {
-  const { pick } = useI18n();
-  const id = getYouTubeId(url);
-  const [playing, setPlaying] = React.useState(false);
-
-  return (
-    <div className="group relative overflow-hidden rounded-3xl border border-ink/8 bg-burgundy-900">
-      <div className="relative" style={{ aspectRatio: "16/10" }}>
-        {playing && id ? (
-          <iframe
-            src={`https://www.youtube.com/embed/${id}?autoplay=1`}
-            title={`Video review ${idx + 1}`}
-            className="absolute inset-0 h-full w-full"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
-        ) : (
-          <>
-            {id ? (
-              <Image
-                src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`}
-                alt={`Video review ${idx + 1}`}
-                fill
-                className="object-cover transition duration-700 group-hover:scale-105"
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
-            ) : (
-              <div className="absolute inset-0 grid place-items-center bg-gradient-to-br from-burgundy-700 to-burgundy-900 text-gold-500/80 font-bebas tracking-[0.22em] text-xs">
-                {url}
-              </div>
-            )}
-
-            <div className="absolute inset-0 bg-burgundy-900/40 transition group-hover:bg-burgundy-900/25" />
-            <button
-              onClick={() => id && setPlaying(true)}
-              aria-label={pick(UI.playVideo)}
-              className="absolute inset-0 grid place-items-center"
-            >
-              <span className="grid h-20 w-20 place-items-center rounded-full bg-gold-500 text-burgundy-900 shadow-gold transition-transform group-hover:scale-105">
-                <Play size={26} className="translate-x-0.5" />
-              </span>
-            </button>
-          </>
-        )}
-
-        <div className="absolute top-4 left-4">
-          <Ribbon variant="gold">VIDEO · {String(idx + 1).padStart(2, "0")}</Ribbon>
-        </div>
-      </div>
-    </div>
-  );
-}
+const REVIEWS_EN = REVIEWS_PL.map((r) => ({ ...r, text: r.text }));
 
 export function Reviews() {
-  const { pick } = useI18n();
+  const { lang } = useI18n();
+  const reviews = lang === "pl" ? REVIEWS_PL : REVIEWS_EN;
+  // Distribute 9 reviews into 3 columns
+  const cols = [reviews.slice(0, 3), reviews.slice(3, 6), reviews.slice(6, 9)];
+
   return (
-    <section id="opinie" className="bg-paper py-28 md:py-40 lg:py-48">
-      <Container className="space-y-16 md:space-y-20">
-        <SectionHeading
-          eyebrow={pick(HEADINGS.reviews)}
-          title={pick(HEADINGS.reviews)}
-          subtitle={pick(HEADINGS.reviewsSub)}
-        />
+    <section id="opinie" className="bg-paper py-section-md overflow-clip">
+      <Container>
+        <div className="flex flex-col items-center text-center gap-5 mb-12 lg:mb-16 max-w-col-6 mx-auto">
+          <Chip>{lang === "pl" ? "Opinie klientów" : "Client reviews"}</Chip>
+          <h2 className="font-display font-bold uppercase leading-[0.9] tracking-[-0.02em] text-ink text-[clamp(2rem,5.5vw,4.5rem)]">
+            {lang === "pl" ? "Klienci nam ufają · 4.9/5" : "People trust us · 4.9/5"}
+          </h2>
+          <div className="flex items-center gap-2">
+            {[0, 1, 2, 3, 4].map((k) => (
+              <Star key={k} size={20} className="fill-accent-deep text-accent-deep" strokeWidth={0} />
+            ))}
+            <span className="text-b3 font-bold uppercase text-ink ml-1">
+              {lang === "pl" ? "Oceny Google i Instagram" : "Google & Instagram ratings"}
+            </span>
+          </div>
+        </div>
 
-        <Tabs.Root defaultValue="photos" className="flex flex-col items-center">
-          <Tabs.List className="inline-flex rounded-full bg-cream p-1">
-            <Tabs.Trigger
-              value="photos"
-              className="rounded-full px-5 py-2 text-sm font-medium text-ink/65 transition data-[state=active]:bg-burgundy-700 data-[state=active]:text-paper"
-            >
-              {pick(REVIEWS_TABS.photos)}
-            </Tabs.Trigger>
-            <Tabs.Trigger
-              value="videos"
-              className="rounded-full px-5 py-2 text-sm font-medium text-ink/65 transition data-[state=active]:bg-burgundy-700 data-[state=active]:text-paper"
-            >
-              {pick(REVIEWS_TABS.videos)}
-            </Tabs.Trigger>
-          </Tabs.List>
-
-          <Tabs.Content value="photos" className="mt-10 focus:outline-none w-full">
-            <FadeUp className="grid md:grid-cols-3 gap-4 md:gap-6">
-              <PhotoCard asset={ASSETS.reviewPhotos[0]} quote={SAMPLE_QUOTES[0]} emphasis />
-              <PhotoCard asset={ASSETS.reviewPhotos[1]} quote={SAMPLE_QUOTES[1]} />
-              <div className="rounded-3xl border border-ink/8 bg-burgundy-700 text-paper p-7 flex flex-col justify-between">
-                <Eyebrow tone="white">Opinia · tekst</Eyebrow>
-                <div className="space-y-4">
-                  <Quote className="text-gold-500" />
-                  <p className="font-display text-xl leading-snug">
-                    {pick(SAMPLE_QUOTES[2].text)}
-                  </p>
-                  <p className="text-xs text-paper/70">
-                    <span className="font-medium">{SAMPLE_QUOTES[2].name}</span> · {pick(SAMPLE_QUOTES[2].role)}
-                  </p>
-                </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 h-[640px] overflow-hidden relative">
+          {cols.map((col, idx) => (
+            <div key={idx} className={idx === 2 ? "hidden lg:block relative overflow-hidden" : "relative overflow-hidden"}>
+              <div
+                className="flex flex-col gap-5 animate-marqueeY"
+                style={{ animationDuration: `${36 + idx * 6}s`, animationDirection: idx % 2 === 1 ? "reverse" : "normal" }}
+              >
+                {[...col, ...col, ...col].map((r, i) => (
+                  <ReviewCard key={`${idx}-${i}`} {...r} />
+                ))}
               </div>
-            </FadeUp>
-          </Tabs.Content>
-
-          <Tabs.Content value="videos" className="mt-10 focus:outline-none w-full">
-            <FadeUp className="grid md:grid-cols-2 gap-4 md:gap-6">
-              <VideoCard url={ASSETS.reviewVideos[0]} idx={0} />
-              <VideoCard url={ASSETS.reviewVideos[1]} idx={1} />
-            </FadeUp>
-          </Tabs.Content>
-        </Tabs.Root>
-
-        <div className="flex justify-center">
-          <a
-            href={BRAND.instagram}
-            target="_blank"
-            rel="noopener"
-            className="inline-flex items-center gap-2 text-sm text-ink/60 hover:text-burgundy-700 transition"
-          >
-            <Instagram size={16} /> @elart_cleaning
-          </a>
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-12 bg-gradient-to-b from-paper to-transparent" />
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-paper to-transparent" />
+            </div>
+          ))}
         </div>
       </Container>
     </section>
+  );
+}
+
+function ReviewCard({ name, role, text }: { name: string; role: string; text: string }) {
+  const initial = name.charAt(0);
+  return (
+    <div className="rounded-2xl bg-surface p-6 flex flex-col gap-4 shadow-card">
+      <div className="flex items-center gap-1 text-accent-deep">
+        {[0, 1, 2, 3, 4].map((k) => (
+          <Star key={k} size={16} fill="currentColor" strokeWidth={0} />
+        ))}
+      </div>
+      <p className="text-b2 text-ink leading-relaxed">{text}</p>
+      <div className="flex items-center gap-3 mt-2">
+        <span className="grid h-10 w-10 place-items-center rounded-full bg-cream-deep text-ink font-display font-bold">
+          {initial}
+        </span>
+        <div className="flex flex-col">
+          <span className="text-b3 font-bold text-ink">{name}</span>
+          <span className="text-label-2 uppercase font-bold text-ink/48">{role}</span>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -1,78 +1,74 @@
 "use client";
 
-import * as Accordion from "@radix-ui/react-accordion";
-import { Plus } from "lucide-react";
-import { Container, SectionHeading } from "@/components/primitives";
-import { FadeUp } from "@/components/motion";
+import { useState } from "react";
+import { Plus, Minus } from "lucide-react";
+import { Container, Chip } from "@/components/primitives";
 import { FAQ } from "@/lib/content";
 import { useI18n } from "@/lib/i18n";
-import { WhatsAppCta } from "@/components/cta";
+import { cn } from "@/lib/utils";
 
-/**
- * Replica of Cleaningflow FAQ — dark left half with absolute-left-bg,
- * 2-column block: heading + paragraph + accordion on left, 3 images on right.
- */
 export function Faq() {
-  const { pick } = useI18n();
+  const { pick, lang } = useI18n();
+  const [open, setOpen] = useState<number | null>(0);
+
   return (
-    <section id="faq" className="relative bg-burgundy-900 text-paper py-28 md:py-40 lg:py-48 overflow-hidden">
-      <div
-        aria-hidden
-        className="absolute inset-0 opacity-[0.12]"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle at 0% 100%, rgba(204,177,112,0.5) 0, transparent 40%)",
-        }}
-      />
-      <Container className="relative space-y-16 md:space-y-24">
-        <FadeUp>
-          <SectionHeading
-            tone="white"
-            align="center"
-            eyebrow="FAQ"
-            title={pick({
-              pl: "Pytania o nasze usługi — odpowiedzi tutaj",
-              en: "Your service-related questions, answered here",
-            })}
-            subtitle={pick({
-              pl: "Najczęstsze pytania o sprzątanie, pranie tapicerki, faktury i abonamenty.",
-              en: "Common questions about cleaning, upholstery, invoices and subscriptions.",
-            })}
-          />
-        </FadeUp>
-
-        <FadeUp className="mx-auto max-w-3xl">
-          <Accordion.Root type="single" collapsible className="divide-y divide-paper/10 border-y border-paper/10">
-            {FAQ.map((item, i) => (
-              <Accordion.Item key={i} value={`q-${i}`}>
-                <Accordion.Header>
-                  <Accordion.Trigger className="group flex w-full items-center justify-between gap-6 text-left py-7 md:py-8">
-                    <span className="flex items-baseline gap-5">
-                      <span className="text-xs font-semibold text-gold-500 tabular-nums shrink-0">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      <span className="font-display text-lg md:text-xl text-paper leading-snug tracking-[-0.01em]">
-                        {pick(item.q)}
-                      </span>
-                    </span>
-                    <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-paper/8 text-paper transition group-data-[state=open]:rotate-45 group-data-[state=open]:bg-gold-500 group-data-[state=open]:text-burgundy-900">
-                      <Plus size={16} />
-                    </span>
-                  </Accordion.Trigger>
-                </Accordion.Header>
-                <Accordion.Content className="overflow-hidden text-paper/70 data-[state=open]:animate-fadeUp">
-                  <p className="pb-7 pl-10 pr-2 text-base leading-relaxed max-w-2xl">
-                    {pick(item.a)}
-                  </p>
-                </Accordion.Content>
-              </Accordion.Item>
-            ))}
-          </Accordion.Root>
-
-          <div className="mt-12 flex justify-center">
-            <WhatsAppCta size="md" label="WhatsApp" />
+    <section id="faq" className="bg-paper pt-section-xs">
+      <Container>
+        <div className="rounded-3xl bg-cream-deep px-6 md:px-10 lg:px-16 py-16 lg:py-24">
+          <div className="flex flex-col items-center text-center gap-5 max-w-col-6 mx-auto mb-12">
+            <Chip tone="surface">FAQ</Chip>
+            <h2 className="font-display font-bold uppercase leading-[0.9] tracking-[-0.02em] text-ink text-[clamp(2rem,5.5vw,4.5rem)]">
+              {lang === "pl" ? "Najczęstsze pytania" : "Frequently asked"}
+            </h2>
+            <p className="text-b1 text-ink/64 max-w-col-4">
+              {lang === "pl"
+                ? "Nie znalazłeś odpowiedzi? Napisz do nas — odpowiadamy w ten sam dzień."
+                : "Didn't find an answer? Message us — we reply the same day."}
+            </p>
           </div>
-        </FadeUp>
+
+          <div className="flex flex-col gap-3 max-w-col-8 mx-auto">
+            {FAQ.map((item, i) => {
+              const isOpen = open === i;
+              return (
+                <div
+                  key={i}
+                  className="rounded-2xl bg-surface p-6 lg:p-7 transition-all"
+                >
+                  <button
+                    onClick={() => setOpen(isOpen ? null : i)}
+                    className="flex w-full items-center justify-between gap-4 text-left"
+                    aria-expanded={isOpen}
+                  >
+                    <span className="font-display font-bold text-h6 text-ink leading-tight">
+                      {pick(item.q)}
+                    </span>
+                    <span
+                      className={cn(
+                        "grid h-9 w-9 place-items-center rounded-full shrink-0 transition-colors",
+                        isOpen ? "bg-ink text-paper" : "bg-cream-deep text-ink",
+                      )}
+                    >
+                      {isOpen ? <Minus size={16} strokeWidth={2.4} /> : <Plus size={16} strokeWidth={2.4} />}
+                    </span>
+                  </button>
+                  <div
+                    className={cn(
+                      "grid transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                      isOpen ? "grid-rows-[1fr] mt-4" : "grid-rows-[0fr]",
+                    )}
+                  >
+                    <div className="overflow-hidden">
+                      <p className="text-b2 text-ink/64 leading-relaxed pt-2">
+                        {pick(item.a)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </Container>
     </section>
   );

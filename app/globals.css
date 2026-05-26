@@ -4,8 +4,10 @@
 
 :root {
   color-scheme: light;
-  --brand-burgundy: #6a0116;
-  --brand-gold: #ccb170;
+  --paper: #fdf8f1;
+  --cream-deep: #f2ece5;
+  --ink: #1b0408;
+  --accent: #e5d4a1;
 }
 
 html {
@@ -14,8 +16,8 @@ html {
 }
 
 html, body {
-  background: #fefefe;
-  color: #1b0408;
+  background: var(--paper);
+  color: var(--ink);
   font-family: var(--font-sans), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -26,16 +28,16 @@ html, body {
 }
 
 ::selection {
-  background: var(--brand-gold);
-  color: #4a000f;
+  background: var(--accent);
+  color: var(--ink);
 }
 
-.text-balance {
-  text-wrap: balance;
-}
+.text-balance { text-wrap: balance; }
+.text-pretty { text-wrap: pretty; }
 
-.text-pretty {
-  text-wrap: pretty;
+.font-display {
+  font-family: var(--font-display), system-ui, sans-serif;
+  letter-spacing: -0.02em;
 }
 
 [data-state="open"] > .accordion-content {
@@ -61,4 +63,25 @@ input[type="range"]::-moz-range-thumb {
   background: transparent;
   border: none;
   cursor: ew-resize;
+}
+
+.link-underline {
+  position: relative;
+  display: inline-flex;
+}
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: currentColor;
+  transform-origin: right center;
+  transform: scaleX(0);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.link-underline:hover::after {
+  transform-origin: left center;
+  transform: scaleX(1);
 }

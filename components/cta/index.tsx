@@ -6,12 +6,8 @@ import { cn } from "@/lib/utils";
 import { buildWhatsAppUrl, defaultQuoteMessage } from "@/lib/whatsapp";
 import { useI18n } from "@/lib/i18n";
 
-type ButtonBase = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  href?: never;
-};
-type AnchorBase = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
-  href: string;
-};
+type ButtonBase = React.ButtonHTMLAttributes<HTMLButtonElement> & { href?: never };
+type AnchorBase = React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string };
 
 type Common = {
   children: React.ReactNode;
@@ -20,12 +16,34 @@ type Common = {
   className?: string;
 };
 
-function baseClasses(size: "md" | "lg") {
+/**
+ * Sparkles-style pill button.
+ * The icon lives inside the button on hover via padding expansion on the right.
+ */
+function basePill(size: "md" | "lg") {
   return cn(
-    "inline-flex items-center gap-2.5 font-medium text-sm md:text-[15px] tracking-wide",
+    "group relative inline-flex items-center gap-2 overflow-hidden rounded-pill font-display font-bold uppercase",
     "transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
-    "active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-burgundy-900",
-    size === "lg" ? "px-7 py-4 rounded-full" : "px-5 py-3 rounded-full",
+    "active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-ink/30 focus-visible:ring-offset-2 focus-visible:ring-offset-paper",
+    size === "lg"
+      ? "px-5 py-4 text-[18px] leading-none hover:pr-12"
+      : "px-4 py-3 text-[14px] leading-none hover:pr-10",
+  );
+}
+
+function IconSlot({ size, children }: { size: "md" | "lg"; children: React.ReactNode }) {
+  return (
+    <span
+      aria-hidden
+      className={cn(
+        "absolute right-2 top-1/2 -translate-y-1/2 grid place-items-center rounded-full opacity-0 -translate-x-2",
+        "transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+        "group-hover:opacity-100 group-hover:translate-x-0",
+        size === "lg" ? "h-8 w-8" : "h-7 w-7",
+      )}
+    >
+      {children}
+    </span>
   );
 }
 
@@ -37,28 +55,30 @@ export function PrimaryButton({
   ...props
 }: Common & (ButtonBase | AnchorBase)) {
   const cls = cn(
-    baseClasses(size),
-    "bg-gold-500 text-burgundy-900 hover:bg-gold-400 shadow-gold",
+    basePill(size),
+    "bg-accent text-ink hover:bg-ink hover:text-paper",
     className,
   );
   const inner = (
     <>
-      <span>{children}</span>
-      <span className="grid h-7 w-7 place-items-center rounded-full bg-burgundy-900 text-gold-500 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
-        {icon ?? <ArrowUpRight size={14} strokeWidth={2.4} />}
-      </span>
+      <span className="relative z-10">{children}</span>
+      <IconSlot size={size}>
+        <span className="grid h-full w-full place-items-center rounded-full bg-paper text-ink">
+          {icon ?? <ArrowUpRight size={16} strokeWidth={2.4} />}
+        </span>
+      </IconSlot>
     </>
   );
   if ("href" in props && props.href) {
     const { href, ...rest } = props as AnchorBase;
     return (
-      <a href={href} className={cn("group", cls)} {...rest}>
+      <a href={href} className={cls} {...rest}>
         {inner}
       </a>
     );
   }
   return (
-    <button className={cn("group", cls)} {...(props as ButtonBase)}>
+    <button className={cls} {...(props as ButtonBase)}>
       {inner}
     </button>
   );
@@ -73,16 +93,25 @@ export function SecondaryButton({
   ...props
 }: Common & { tone?: "ink" | "white" } & (ButtonBase | AnchorBase)) {
   const cls = cn(
-    baseClasses(size),
+    basePill(size),
     tone === "white"
-      ? "border border-paper/30 text-paper hover:border-gold-500 hover:text-gold-500"
-      : "border border-ink/15 text-ink hover:border-burgundy-700 hover:text-burgundy-700",
+      ? "bg-paper/15 text-paper hover:bg-paper hover:text-ink backdrop-blur"
+      : "bg-ink/[0.08] text-ink hover:bg-ink hover:text-paper",
     className,
   );
   const inner = (
     <>
-      <span>{children}</span>
-      {icon ? <span className="grid place-items-center">{icon}</span> : null}
+      <span className="relative z-10">{children}</span>
+      <IconSlot size={size}>
+        <span
+          className={cn(
+            "grid h-full w-full place-items-center rounded-full",
+            tone === "white" ? "bg-ink text-paper" : "bg-paper text-ink",
+          )}
+        >
+          {icon ?? <ArrowUpRight size={16} strokeWidth={2.4} />}
+        </span>
+      </IconSlot>
     </>
   );
   if ("href" in props && props.href) {

@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 export function LangSwitcher({ tone = "ink" }: { tone?: "ink" | "white" }) {
   const { lang, setLang } = useI18n();
   const base = "px-2.5 py-1 text-xs font-medium tracking-wider uppercase transition";
-  const active = tone === "white" ? "text-gold-500" : "text-burgundy-700";
+  const active = tone === "white" ? "text-paper" : "text-ink";
   const idle = tone === "white" ? "text-paper/55 hover:text-paper" : "text-ink/55 hover:text-ink";
   return (
     <div

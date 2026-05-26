@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Menu, MessageCircle } from "lucide-react";
+import { Menu, ArrowUpRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BRAND, NAV_ANCHORS } from "@/lib/constants";
 import { UI } from "@/lib/content";
@@ -21,31 +21,48 @@ export function Header() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   const anchorIds = NAV_ANCHORS.map((a) => a.id);
-  const activeId = useScrollSpy(anchorIds, 120);
+  const activeId = useScrollSpy(anchorIds, 140);
 
-  const hidden = mounted && dir === "down" && y > 160;
+  const hidden = mounted && dir === "down" && y > 200;
   const scrolled = mounted && y > 24;
 
   return (
     <>
+      {/* Top announcement banner */}
+      <div className="hidden md:block bg-accent text-ink py-1.5 text-center text-b3 font-semibold">
+        <span>
+          {lang === "pl"
+            ? "4 wolne terminy w tym tygodniu · "
+            : "4 open slots this week · "}
+          <a
+            href={buildWhatsAppUrl(defaultQuoteMessage(lang))}
+            target="_blank"
+            rel="noopener"
+            className="link-underline"
+          >
+            {lang === "pl" ? "Zarezerwuj zanim znikną" : "Book before they're gone"}
+          </a>
+        </span>
+      </div>
+
       <AnimatePresence>
         <motion.header
           initial={{ y: 0 }}
-          animate={{ y: hidden ? -120 : 0 }}
+          animate={{ y: hidden ? -160 : 0 }}
           transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
           className={cn(
-            "fixed top-0 left-0 right-0 z-50 transition-colors duration-300",
+            "sticky top-0 left-0 right-0 z-50 transition-colors duration-300",
             scrolled
-              ? "bg-paper border-b border-ink/8 shadow-[0_8px_30px_-20px_rgba(74,0,15,0.25)]"
-              : "bg-paper/85 backdrop-blur-md border-b border-transparent",
+              ? "bg-paper border-b border-ink/8"
+              : "bg-paper border-b border-transparent",
           )}
         >
-          <div className="mx-auto max-w-container px-5 md:px-8 lg:px-10">
+          <div className="mx-auto max-w-container px-4 md:px-6 lg:px-8">
             <div className="flex h-16 md:h-20 items-center justify-between gap-4">
               {/* Logo */}
               <a
                 href="#top"
-                className="flex items-center gap-3 group shrink-0"
+                className="flex items-center gap-3 shrink-0"
                 aria-label={BRAND.name}
               >
                 <Image
@@ -54,13 +71,13 @@ export function Header() {
                   width={44}
                   height={44}
                   priority
-                  className="h-10 w-10 md:h-12 md:w-12 object-contain"
+                  className="h-10 w-10 md:h-11 md:w-11 object-contain"
                 />
                 <span className="hidden sm:flex flex-col leading-none">
-                  <span className="font-display text-lg md:text-xl text-ink group-hover:text-burgundy-700 transition-colors">
+                  <span className="font-display text-[18px] font-bold text-ink">
                     {BRAND.name}
                   </span>
-                  <span className="font-bebas tracking-[0.22em] text-[10px] text-gold-600">
+                  <span className="text-label-2 font-bold uppercase text-ink/64 mt-0.5">
                     POZNAŃ
                   </span>
                 </span>
@@ -75,18 +92,11 @@ export function Header() {
                       key={a.id}
                       href={`#${a.id}`}
                       className={cn(
-                        "relative text-sm font-medium transition-colors py-1",
-                        isActive ? "text-burgundy-700" : "text-ink/80 hover:text-burgundy-700",
+                        "text-b3 font-semibold transition-colors py-1 link-underline",
+                        isActive ? "text-ink" : "text-ink/64 hover:text-ink",
                       )}
                     >
                       {lang === "pl" ? a.pl : a.en}
-                      <span
-                        aria-hidden
-                        className={cn(
-                          "absolute -bottom-1 left-0 right-0 h-px bg-gold-500 origin-left transition-transform duration-300",
-                          isActive ? "scale-x-100" : "scale-x-0",
-                        )}
-                      />
                     </a>
                   );
                 })}
@@ -102,18 +112,23 @@ export function Header() {
                   href={buildWhatsAppUrl(defaultQuoteMessage(lang))}
                   target="_blank"
                   rel="noopener"
-                  className="hidden md:inline-flex group items-center gap-2.5 rounded-full bg-burgundy-700 text-paper pl-4 pr-2 py-2 text-sm font-medium hover:bg-burgundy-800 transition-all active:scale-[0.98]"
+                  className="hidden md:inline-flex group relative items-center overflow-hidden rounded-pill bg-accent text-ink px-4 py-2.5 text-[14px] font-display font-bold uppercase leading-none transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-ink hover:text-paper hover:pr-10"
                 >
-                  <span>WhatsApp</span>
-                  <span className="grid h-8 w-8 place-items-center rounded-full bg-gold-500 text-burgundy-900 transition-transform group-hover:rotate-12">
-                    <MessageCircle size={16} strokeWidth={2.2} />
+                  <span className="relative z-10">
+                    {lang === "pl" ? "Zamów wycenę" : "Book now"}
+                  </span>
+                  <span
+                    aria-hidden
+                    className="absolute right-1.5 top-1/2 -translate-y-1/2 grid h-7 w-7 place-items-center rounded-full bg-paper text-ink opacity-0 -translate-x-2 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-100 group-hover:translate-x-0"
+                  >
+                    <ArrowUpRight size={14} strokeWidth={2.4} />
                   </span>
                 </a>
 
                 <button
                   aria-label={pick(UI.menu)}
                   onClick={() => setMenuOpen(true)}
-                  className="md:hidden grid h-11 w-11 place-items-center rounded-full bg-paper border border-ink/15 text-ink hover:border-burgundy-700 hover:text-burgundy-700 transition"
+                  className="md:hidden grid h-11 w-11 place-items-center rounded-full bg-surface border border-ink/10 text-ink"
                 >
                   <Menu size={20} />
                 </button>

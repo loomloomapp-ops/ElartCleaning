@@ -1,35 +1,28 @@
 import type { Metadata, Viewport } from "next";
-import { Playfair_Display, Inter, Bebas_Neue } from "next/font/google";
+import { Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import { I18nProvider } from "@/lib/i18n";
 import { PopupProvider } from "@/components/widgets/PopupProvider";
 import { SEO } from "@/lib/constants";
 
-const display = Playfair_Display({
+const display = Bricolage_Grotesque({
   subsets: ["latin", "latin-ext"],
   variable: "--font-display",
   display: "swap",
-  weight: ["500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
-const sans = Inter({
+const sans = Bricolage_Grotesque({
   subsets: ["latin", "latin-ext"],
   variable: "--font-sans",
   display: "swap",
   weight: ["400", "500", "600", "700"],
 });
 
-const bebas = Bebas_Neue({
-  subsets: ["latin", "latin-ext"],
-  variable: "--font-bebas",
-  display: "swap",
-  weight: ["400"],
-});
-
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#6A0116",
+  themeColor: "#FDF8F1",
 };
 
 export const metadata: Metadata = {
@@ -78,11 +71,11 @@ const jsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pl" className={`${display.variable} ${sans.variable} ${bebas.variable}`}>
+    <html lang="pl" className={`${display.variable} ${sans.variable}`}>
       <body className="bg-paper text-ink antialiased">
         <a
           href="#top"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[120] focus:rounded-full focus:bg-burgundy-700 focus:text-paper focus:px-4 focus:py-2 focus:text-sm"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[120] focus:rounded-full focus:bg-ink focus:text-paper focus:px-4 focus:py-2 focus:text-sm"
         >
           Pomiń do treści
         </a>
