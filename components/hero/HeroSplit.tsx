@@ -37,7 +37,7 @@ export function HeroSplit() {
             </div>
 
             {/* Headline with vertical swap */}
-            <h1 className="font-display font-bold uppercase leading-[0.92] tracking-[-0.02em] text-ink text-[clamp(2rem,4.8vw,4.25rem)]">
+            <h1 className="font-display font-bold uppercase leading-[0.95] tracking-[-0.02em] text-ink text-[clamp(1.75rem,3.8vw,3.25rem)] break-words">
               {lang === "pl" ? (
                 <>
                   <span className="block">PROFESJONALNE</span>
