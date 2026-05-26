@@ -48,9 +48,9 @@ export function ContactForm() {
   };
 
   return (
-    <section id="kontakt" className="bg-burgundy-800 text-paper py-24 md:py-32">
-      <Container className="grid gap-12 lg:grid-cols-[1fr_1.2fr] lg:gap-16">
-        <div className="space-y-8">
+    <section id="kontakt" className="bg-burgundy-800 text-paper py-28 md:py-40">
+      <Container className="grid gap-14 lg:grid-cols-[1fr_1.2fr] lg:gap-20">
+        <div className="space-y-10">
           <SectionHeading
             eyebrow={pick(HEADINGS.contact)}
             title={pick(HEADINGS.contact)}
@@ -120,7 +120,7 @@ export function ContactForm() {
         <FadeUp>
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="space-y-4 rounded-3xl bg-paper text-ink p-6 md:p-8 shadow-card"
+            className="space-y-5 rounded-3xl bg-paper text-ink p-7 md:p-10 lg:p-12 shadow-card border border-paper/10"
           >
             <div className="grid md:grid-cols-2 gap-4">
               <Field label={pick(FORM.name)} error={errors.name && pick(FORM.required)}>

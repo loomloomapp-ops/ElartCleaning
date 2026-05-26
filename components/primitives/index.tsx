@@ -47,6 +47,7 @@ export function SectionHeading({
   align = "left",
   tone = "ink",
   className,
+  aside,
 }: {
   eyebrow?: React.ReactNode;
   title: React.ReactNode;
@@ -54,31 +55,63 @@ export function SectionHeading({
   align?: "left" | "center";
   tone?: "ink" | "white";
   className?: string;
+  /** Optional secondary copy rendered as an editorial right column on lg+ */
+  aside?: React.ReactNode;
 }) {
-  const heading =
-    tone === "white"
-      ? "text-paper"
-      : "text-ink";
-  const sub = tone === "white" ? "text-paper/75" : "text-ink/70";
-  return (
-    <div
-      className={cn(
-        "max-w-3xl flex flex-col gap-4",
-        align === "center" && "mx-auto text-center items-center",
-        className,
-      )}
-    >
-      {eyebrow ? <Eyebrow tone={tone === "white" ? "gold" : "gold"}>{eyebrow}</Eyebrow> : null}
+  const isWhite = tone === "white";
+  const heading = isWhite ? "text-paper" : "text-ink";
+  const sub = isWhite ? "text-paper/75" : "text-ink/65";
+  const dot = isWhite ? "bg-gold-500" : "bg-burgundy-700";
+
+  const headerCol = (
+    <div className={cn("flex flex-col gap-5", align === "center" && "items-center text-center")}>
+      {eyebrow ? (
+        <span
+          className={cn(
+            "inline-flex items-center gap-2.5 font-bebas tracking-[0.24em] text-xs md:text-sm uppercase",
+            isWhite ? "text-gold-500" : "text-burgundy-700",
+          )}
+        >
+          <span className={cn("h-1.5 w-1.5 rounded-full", dot)} />
+          {eyebrow}
+        </span>
+      ) : null}
       <h2
         className={cn(
-          "font-display font-medium leading-[1.05] tracking-tight text-balance",
-          "text-[clamp(2rem,4.4vw,3.5rem)]",
+          "font-display font-medium leading-[1.02] tracking-tight text-balance",
+          "text-[clamp(2.25rem,5vw,4.25rem)] max-w-3xl",
           heading,
         )}
       >
         {title}
       </h2>
-      {subtitle ? (
+      {subtitle && align === "center" ? (
+        <p className={cn("text-base md:text-lg leading-relaxed max-w-2xl mx-auto", sub)}>
+          {subtitle}
+        </p>
+      ) : null}
+    </div>
+  );
+
+  // Editorial split: heading on the left, supporting copy on the right (lg+)
+  if (aside && align === "left") {
+    return (
+      <div className={cn("grid lg:grid-cols-[1.4fr_1fr] gap-8 lg:gap-16 items-end", className)}>
+        {headerCol}
+        <div className={cn("space-y-4 max-w-md lg:pb-2", sub)}>
+          {aside}
+          {subtitle ? (
+            <p className="text-base md:text-lg leading-relaxed">{subtitle}</p>
+          ) : null}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={cn("flex flex-col gap-5 max-w-3xl", align === "center" && "mx-auto", className)}>
+      {headerCol}
+      {subtitle && align !== "center" ? (
         <p className={cn("text-base md:text-lg leading-relaxed max-w-2xl", sub)}>{subtitle}</p>
       ) : null}
     </div>

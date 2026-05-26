@@ -139,23 +139,23 @@ function VideoCard({ url, idx }: { url: string; idx: number }) {
 export function Reviews() {
   const { pick } = useI18n();
   return (
-    <section id="opinie" className="bg-paper py-24 md:py-32">
-      <Container className="space-y-12">
-        <div className="flex items-end justify-between gap-6 flex-wrap">
-          <SectionHeading
-            eyebrow={pick(HEADINGS.reviews)}
-            title={pick(HEADINGS.reviews)}
-            subtitle={pick(HEADINGS.reviewsSub)}
-          />
-          <a
-            href={BRAND.instagram}
-            target="_blank"
-            rel="noopener"
-            className="hidden md:inline-flex items-center gap-2 text-sm text-ink/70 hover:text-burgundy-700 transition"
-          >
-            <Instagram size={16} /> @elart_cleaning
-          </a>
-        </div>
+    <section id="opinie" className="bg-paper py-28 md:py-40">
+      <Container className="space-y-14 md:space-y-16">
+        <SectionHeading
+          eyebrow={pick(HEADINGS.reviews)}
+          title={pick(HEADINGS.reviews)}
+          aside={
+            <a
+              href={BRAND.instagram}
+              target="_blank"
+              rel="noopener"
+              className="inline-flex items-center gap-2 text-sm text-ink/70 hover:text-burgundy-700 transition"
+            >
+              <Instagram size={16} /> @elart_cleaning
+            </a>
+          }
+          subtitle={pick(HEADINGS.reviewsSub)}
+        />
 
         <Tabs.Root defaultValue="photos">
           <Tabs.List className="inline-flex rounded-full border border-ink/10 bg-cream p-1">

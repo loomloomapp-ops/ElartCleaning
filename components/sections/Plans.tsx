@@ -15,19 +15,27 @@ import { cn } from "@/lib/utils";
 export function Plans() {
   const { pick } = useI18n();
   return (
-    <section id="cennik" className="bg-paper py-24 md:py-32 lg:py-36">
-      <Container className="space-y-12">
-        {/* Title bar */}
+    <section id="cennik" className="bg-paper py-28 md:py-40">
+      <Container className="space-y-14 md:space-y-20">
+        {/* Editorial intro band */}
         <FadeUp>
-          <div className="flex items-center gap-3 mb-4">
-            <span className="h-1.5 w-1.5 rounded-full bg-burgundy-700" />
-            <span className="font-bebas tracking-[0.24em] text-xs md:text-sm text-burgundy-700 uppercase">
-              {pick(HEADINGS.prices)}
-            </span>
+          <div className="grid lg:grid-cols-[1.4fr_1fr] gap-8 lg:gap-16 items-end">
+            <div className="space-y-5">
+              <span className="inline-flex items-center gap-2.5 font-bebas tracking-[0.24em] text-xs md:text-sm uppercase text-burgundy-700">
+                <span className="h-1.5 w-1.5 rounded-full bg-burgundy-700" />
+                {pick(HEADINGS.prices)}
+              </span>
+              <h2 className="font-display font-medium leading-[1.02] tracking-tight text-balance text-ink text-[clamp(2.25rem,5vw,4.25rem)] max-w-2xl">
+                {pick(HEADINGS.plans)}
+              </h2>
+            </div>
+            <p className="text-ink/65 leading-relaxed text-base md:text-lg max-w-md lg:pb-2">
+              {pick({
+                pl: "Trzy progi do wyboru — od ekspresowego odświeżenia po pełną opiekę. Każda wycena dopasowana do metrażu i stanu.",
+                en: "Three tiers to choose from — from express refresh to full care. Each quote is tailored to area and condition.",
+              })}
+            </p>
           </div>
-          <h2 className="font-display font-medium leading-[1.05] tracking-tight text-balance text-ink text-[clamp(2.2rem,5vw,4rem)] max-w-3xl">
-            {pick(HEADINGS.plans)}
-          </h2>
         </FadeUp>
 
         {/* 3 cards */}
@@ -119,29 +127,39 @@ export function Plans() {
         </StaggerGroup>
 
         {/* Note + full pricelist grid */}
-        <FadeUp className="space-y-6">
-          <p className="text-sm text-ink/60 max-w-3xl mx-auto text-center">{pick(PRICES_NOTE)}</p>
-          <div className="rounded-[1.5rem] border border-ink/8 bg-cream p-6 md:p-8">
-            <p className="text-sm font-semibold tracking-wide text-burgundy-700 uppercase mb-5">
-              {pick({ pl: "Pełen cennik", en: "Full pricelist" })}
-            </p>
-            <ul className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
-              {PRICES.map((p) => (
-                <li
-                  key={p.key}
-                  className="rounded-2xl bg-paper border border-ink/8 p-5 hover:border-burgundy-700/30 transition"
-                >
-                  <p className="text-sm font-semibold text-burgundy-700 leading-snug">
-                    {pick(p.title)}
-                  </p>
-                  <p className="mt-2 text-2xl font-semibold text-ink tabular-nums leading-tight">
-                    {pick(p.price)}
-                  </p>
-                  <p className="mt-2 text-sm text-ink/65 leading-relaxed">{pick(p.note)}</p>
-                </li>
-              ))}
-            </ul>
+        <FadeUp className="space-y-8">
+          <div className="flex items-end justify-between gap-6 flex-wrap">
+            <div className="space-y-3 max-w-2xl">
+              <span className="inline-flex items-center gap-2.5 font-bebas tracking-[0.24em] text-xs uppercase text-burgundy-700">
+                <span className="h-1.5 w-1.5 rounded-full bg-burgundy-700" />
+                {pick({ pl: "Pełen cennik", en: "Full pricelist" })}
+              </span>
+              <h3 className="font-display text-2xl md:text-3xl text-ink leading-tight">
+                {pick({
+                  pl: "Pojedyncze pozycje i dodatki",
+                  en: "Individual items & add-ons",
+                })}
+              </h3>
+            </div>
+            <p className="text-sm text-ink/60 max-w-md">{pick(PRICES_NOTE)}</p>
           </div>
+
+          <ul className="grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-ink/8 border border-ink/8 rounded-[1.5rem] overflow-hidden">
+            {PRICES.map((p) => (
+              <li
+                key={p.key}
+                className="bg-paper p-6 hover:bg-cream transition flex flex-col gap-3"
+              >
+                <p className="text-sm font-semibold text-burgundy-700 leading-snug">
+                  {pick(p.title)}
+                </p>
+                <p className="text-2xl font-semibold text-ink tabular-nums leading-tight">
+                  {pick(p.price)}
+                </p>
+                <p className="text-sm text-ink/65 leading-relaxed mt-auto">{pick(p.note)}</p>
+              </li>
+            ))}
+          </ul>
         </FadeUp>
       </Container>
     </section>
