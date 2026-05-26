@@ -57,10 +57,10 @@ const config: Config = {
         h1: ["6.5rem", { lineHeight: "5.5rem", letterSpacing: "-0.125rem" }],
       },
       spacing: {
-        "section-xs": "2rem",
-        "section-sm": "5rem",
-        "section-md": "7.5rem",
-        "section-lg": "10rem",
+        "section-xs": "clamp(1rem, 2.5vw, 1.5rem)",
+        "section-sm": "clamp(2rem, 4vw, 3rem)",
+        "section-md": "clamp(2.5rem, 5vw, 4.5rem)",
+        "section-lg": "clamp(3rem, 6vw, 5.5rem)",
       },
       maxWidth: {
         container: "1440px",

@@ -11,10 +11,10 @@ export function Footer() {
   const { pick, lang } = useI18n();
 
   return (
-    <footer className="bg-paper pt-section-md pb-10 border-t border-ink/8 mt-section-xs">
+    <footer className="bg-paper pt-section-md pb-8 border-t border-ink/8 mt-section-sm">
       <Container>
         {/* Top tile */}
-        <div className="grid lg:grid-cols-[1.2fr_1fr] gap-10 lg:gap-16 mb-12">
+        <div className="grid lg:grid-cols-[1.2fr_1fr] gap-8 lg:gap-12 mb-8">
           {/* Left — contact tiles */}
           <div className="grid sm:grid-cols-3 gap-4">
             <FooterTile

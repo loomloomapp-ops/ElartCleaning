@@ -10,7 +10,7 @@ export function ReadyCta() {
   return (
     <section id="kontakt" className="bg-paper pt-section-xs">
       <Container>
-        <div className="rounded-3xl bg-accent text-ink px-6 md:px-10 lg:px-16 py-20 lg:py-32 flex flex-col items-center text-center gap-6">
+        <div className="rounded-3xl bg-accent text-ink px-6 md:px-10 lg:px-14 py-12 md:py-16 lg:py-20 flex flex-col items-center text-center gap-5">
           <Chip tone="surface">{lang === "pl" ? "Czas na czystość" : "Ready to clean"}</Chip>
           <h2 className="font-display font-bold uppercase leading-[0.9] tracking-[-0.02em] text-[clamp(2rem,6vw,5rem)] max-w-col-6">
             {lang === "pl"

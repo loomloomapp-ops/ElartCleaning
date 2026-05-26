@@ -20,8 +20,8 @@ export function Plans() {
   return (
     <section id="cennik" className="bg-paper py-section-md">
       <Container>
-        <div className="rounded-3xl bg-cream-deep px-6 md:px-10 lg:px-16 py-16 lg:py-24">
-          <div className="flex flex-col items-center text-center gap-5 max-w-col-6 mx-auto mb-10">
+        <div className="rounded-3xl bg-cream-deep px-6 md:px-10 lg:px-14 py-10 md:py-14 lg:py-16">
+          <div className="flex flex-col items-center text-center gap-4 max-w-col-6 mx-auto mb-8">
             <Chip tone="surface">{lang === "pl" ? "Cennik" : "Pricing"}</Chip>
             <h2 className="font-display font-bold uppercase leading-[0.9] tracking-[-0.02em] text-ink text-[clamp(2rem,5.5vw,4.5rem)]">
               {lang === "pl" ? "Przejrzysty cennik" : "Simple pricing"}
@@ -34,7 +34,7 @@ export function Plans() {
           </div>
 
           {/* Tabs */}
-          <div className="flex flex-wrap items-center justify-center gap-2 mb-10">
+          <div className="flex flex-wrap items-center justify-center gap-2 mb-8">
             {scopes.map((s, i) => (
               <button
                 key={s}

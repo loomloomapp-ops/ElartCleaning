@@ -13,7 +13,7 @@ export function ServicesMarquee() {
   return (
     <section id="uslugi" className="bg-paper py-section-sm">
       <Container>
-        <div className="flex flex-col gap-4 max-w-col-6 mb-12 lg:mb-16">
+        <div className="flex flex-col gap-4 max-w-col-6 mb-8 lg:mb-10">
           <Chip>{lang === "pl" ? "Usługi Elart Cleaning" : "Elart services"}</Chip>
           <h2 className="font-display font-bold uppercase leading-[0.9] tracking-[-0.02em] text-ink text-[clamp(2rem,5.5vw,4.5rem)]">
             {lang === "pl" ? "Co czyścimy" : "What we clean"}

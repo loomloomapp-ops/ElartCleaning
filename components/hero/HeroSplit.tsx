@@ -25,7 +25,7 @@ export function HeroSplit() {
   }, [scopes.length]);
 
   return (
-    <section id="top" className="bg-paper pt-section-sm pb-section-md">
+    <section id="top" className="bg-paper pt-6 md:pt-10 pb-section-md">
       <Container>
         <div className="grid lg:grid-cols-[1fr_1.1fr] gap-8 lg:gap-12 items-stretch">
           {/* LEFT — text */}
@@ -116,7 +116,7 @@ export function HeroSplit() {
         </div>
 
         {/* Support 4-up grid */}
-        <div className="mt-12 lg:mt-16 grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="mt-8 lg:mt-12 grid grid-cols-2 lg:grid-cols-4 gap-3">
           <SupportItem
             icon={<Phone size={18} strokeWidth={2.4} />}
             label={lang === "pl" ? "Zadzwoń" : "Call"}

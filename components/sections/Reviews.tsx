@@ -27,7 +27,7 @@ export function Reviews() {
   return (
     <section id="opinie" className="bg-paper py-section-md overflow-clip">
       <Container>
-        <div className="flex flex-col items-center text-center gap-5 mb-12 lg:mb-16 max-w-col-6 mx-auto">
+        <div className="flex flex-col items-center text-center gap-4 mb-8 lg:mb-12 max-w-col-6 mx-auto">
           <Chip>{lang === "pl" ? "Opinie klientów" : "Client reviews"}</Chip>
           <h2 className="font-display font-bold uppercase leading-[0.9] tracking-[-0.02em] text-ink text-[clamp(2rem,5.5vw,4.5rem)]">
             {lang === "pl" ? "Klienci nam ufają · 4.9/5" : "People trust us · 4.9/5"}
