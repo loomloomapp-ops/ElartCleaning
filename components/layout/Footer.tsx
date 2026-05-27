@@ -116,12 +116,12 @@ function FooterTile({
 }) {
   const inner = (
     <>
-      <span className="grid h-10 w-10 place-items-center rounded-full bg-surface text-ink shrink-0">
+      <span className="grid h-10 w-10 place-items-center rounded-full bg-surface text-ink shrink-0 transition-colors group-hover:bg-paper/15 group-hover:text-paper">
         {icon}
       </span>
       <span className="flex flex-col leading-tight min-w-0">
-        <span className="text-label-2 uppercase font-bold text-ink/64">{label}</span>
-        <span className="text-b3 font-bold text-ink truncate">{value}</span>
+        <span className="text-label-2 uppercase font-bold text-ink/64 transition-colors group-hover:text-paper/70">{label}</span>
+        <span className="text-b3 font-bold text-ink truncate transition-colors group-hover:text-paper">{value}</span>
       </span>
     </>
   );

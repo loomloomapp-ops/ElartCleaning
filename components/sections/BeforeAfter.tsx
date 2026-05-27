@@ -137,6 +137,8 @@ const CASES: CaseItem[] = [
 
 /* ---------- before/after slider (pointer + touch + keyboard) ---------- */
 
+const START_POS = 55;
+
 function BaSlider({
   before,
   after,
@@ -148,17 +150,31 @@ function BaSlider({
   beforeLabel: string;
   afterLabel: string;
 }) {
-  const [pos, setPos] = React.useState(55);
-  const ref = React.useRef<HTMLDivElement>(null);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const beforeRef = React.useRef<HTMLDivElement>(null);
+  const dividerRef = React.useRef<HTMLDivElement>(null);
+  const handleRef = React.useRef<HTMLDivElement>(null);
   const dragging = React.useRef(false);
+  const posRef = React.useRef(START_POS);
 
-  const setFromClientX = React.useCallback((clientX: number) => {
-    const el = ref.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const p = ((clientX - rect.left) / rect.width) * 100;
-    setPos(Math.min(100, Math.max(0, p)));
+  // Write straight to the DOM — no React re-render per move (smooth on mobile).
+  const apply = React.useCallback((p: number) => {
+    const clamped = Math.min(100, Math.max(0, p));
+    posRef.current = clamped;
+    if (beforeRef.current) beforeRef.current.style.clipPath = `inset(0 ${100 - clamped}% 0 0)`;
+    if (dividerRef.current) dividerRef.current.style.left = `${clamped}%`;
+    handleRef.current?.setAttribute("aria-valuenow", String(Math.round(clamped)));
   }, []);
+
+  const setFromClientX = React.useCallback(
+    (clientX: number) => {
+      const el = containerRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      apply(((clientX - rect.left) / rect.width) * 100);
+    },
+    [apply],
+  );
 
   const onPointerDown = (e: React.PointerEvent) => {
     dragging.current = true;
@@ -173,16 +189,17 @@ function BaSlider({
     dragging.current = false;
   };
   const onKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "ArrowLeft") setPos((p) => Math.max(0, p - 4));
-    if (e.key === "ArrowRight") setPos((p) => Math.min(100, p + 4));
+    if (e.key === "ArrowLeft") apply(posRef.current - 4);
+    if (e.key === "ArrowRight") apply(posRef.current + 4);
   };
 
   return (
     <div
-      ref={ref}
+      ref={containerRef}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={stop}
+      onPointerCancel={stop}
       onPointerLeave={stop}
       className="relative w-full cursor-ew-resize touch-none select-none overflow-hidden bg-cream-deep"
       style={{ aspectRatio: "4/3" }}
@@ -191,7 +208,12 @@ function BaSlider({
       <SafeImage src={after} alt={afterLabel} ratio="4/3" className="absolute inset-0 h-full w-full" />
 
       {/* BEFORE (clipped from the left, slightly dimmed to read as "dirty") */}
-      <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }} aria-hidden>
+      <div
+        ref={beforeRef}
+        className="absolute inset-0 will-change-[clip-path]"
+        style={{ clipPath: `inset(0 ${100 - START_POS}% 0 0)` }}
+        aria-hidden
+      >
         <SafeImage
           src={before}
           alt={beforeLabel}
@@ -212,17 +234,19 @@ function BaSlider({
 
       {/* divider + handle */}
       <div
-        className="absolute inset-y-0 z-20 w-0.5 bg-paper/90 shadow-[0_0_0_1px_rgba(27,4,8,0.15)]"
-        style={{ left: `${pos}%`, transform: "translateX(-1px)" }}
+        ref={dividerRef}
+        className="absolute inset-y-0 z-20 w-0.5 -translate-x-1/2 bg-paper/90 will-change-[left] shadow-[0_0_0_1px_rgba(27,4,8,0.15)]"
+        style={{ left: `${START_POS}%` }}
         aria-hidden
       >
         <div
+          ref={handleRef}
           role="slider"
           tabIndex={0}
           aria-label={`${beforeLabel} / ${afterLabel}`}
           aria-valuemin={0}
           aria-valuemax={100}
-          aria-valuenow={Math.round(pos)}
+          aria-valuenow={START_POS}
           onKeyDown={onKeyDown}
           className="absolute left-1/2 top-1/2 grid h-11 w-11 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-ink/10 bg-surface text-burgundy-700 shadow-soft focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
