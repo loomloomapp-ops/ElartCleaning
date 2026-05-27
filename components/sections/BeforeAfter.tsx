@@ -156,6 +156,9 @@ function BaSlider({
   const handleRef = React.useRef<HTMLDivElement>(null);
   const dragging = React.useRef(false);
   const posRef = React.useRef(START_POS);
+  const rectRef = React.useRef<DOMRect | null>(null);
+  const rafRef = React.useRef(0);
+  const pendingX = React.useRef(0);
 
   // Write straight to the DOM — no React re-render per move (smooth on mobile).
   const apply = React.useCallback((p: number) => {
@@ -166,12 +169,17 @@ function BaSlider({
     handleRef.current?.setAttribute("aria-valuenow", String(Math.round(clamped)));
   }, []);
 
-  const setFromClientX = React.useCallback(
+  // Coalesce many pointermove events into one paint per animation frame.
+  const schedule = React.useCallback(
     (clientX: number) => {
-      const el = containerRef.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      apply(((clientX - rect.left) / rect.width) * 100);
+      pendingX.current = clientX;
+      if (rafRef.current) return;
+      rafRef.current = requestAnimationFrame(() => {
+        rafRef.current = 0;
+        const rect = rectRef.current;
+        if (!rect || rect.width === 0) return;
+        apply(((pendingX.current - rect.left) / rect.width) * 100);
+      });
     },
     [apply],
   );
@@ -179,15 +187,27 @@ function BaSlider({
   const onPointerDown = (e: React.PointerEvent) => {
     dragging.current = true;
     (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
-    setFromClientX(e.clientX);
+    rectRef.current = containerRef.current?.getBoundingClientRect() ?? null; // cache once per drag
+    schedule(e.clientX);
   };
   const onPointerMove = (e: React.PointerEvent) => {
     if (!dragging.current) return;
-    setFromClientX(e.clientX);
+    schedule(e.clientX);
   };
   const stop = () => {
     dragging.current = false;
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = 0;
+    }
   };
+
+  React.useEffect(
+    () => () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    },
+    [],
+  );
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowLeft") apply(posRef.current - 4);
     if (e.key === "ArrowRight") apply(posRef.current + 4);
@@ -210,7 +230,7 @@ function BaSlider({
       {/* BEFORE (clipped from the left, slightly dimmed to read as "dirty") */}
       <div
         ref={beforeRef}
-        className="absolute inset-0 will-change-[clip-path]"
+        className="absolute inset-0 will-change-[clip-path] [transform:translateZ(0)] [backface-visibility:hidden]"
         style={{ clipPath: `inset(0 ${100 - START_POS}% 0 0)` }}
         aria-hidden
       >
@@ -219,9 +239,10 @@ function BaSlider({
           alt={beforeLabel}
           ratio="4/3"
           tone="cream"
-          className="absolute inset-0 h-full w-full [filter:grayscale(0.28)_brightness(0.84)_contrast(1.02)]"
+          className="absolute inset-0 h-full w-full [filter:grayscale(0.28)_brightness(0.8)_contrast(1.03)]"
         />
-        <div className="absolute inset-0 bg-burgundy-900/25 mix-blend-multiply" />
+        {/* plain dark wash (no mix-blend — far cheaper to repaint on mobile) */}
+        <div className="absolute inset-0 bg-burgundy-900/30" />
       </div>
 
       {/* badges */}
