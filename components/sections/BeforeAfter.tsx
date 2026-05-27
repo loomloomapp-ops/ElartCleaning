@@ -184,30 +184,37 @@ function BaSlider({
     [apply],
   );
 
-  const onPointerDown = (e: React.PointerEvent) => {
-    dragging.current = true;
-    (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
-    rectRef.current = containerRef.current?.getBoundingClientRect() ?? null; // cache once per drag
-    schedule(e.clientX);
-  };
-  const onPointerMove = (e: React.PointerEvent) => {
-    if (!dragging.current) return;
-    schedule(e.clientX);
-  };
-  const stop = () => {
+  // Global listeners so the drag keeps following the finger even when it
+  // slips off the handle/container — far more reliable on touch than capture.
+  const onWindowMove = React.useCallback(
+    (e: PointerEvent) => {
+      if (!dragging.current) return;
+      schedule(e.clientX);
+    },
+    [schedule],
+  );
+  const endDrag = React.useCallback(() => {
     dragging.current = false;
     if (rafRef.current) {
       cancelAnimationFrame(rafRef.current);
       rafRef.current = 0;
     }
+    window.removeEventListener("pointermove", onWindowMove);
+    window.removeEventListener("pointerup", endDrag);
+    window.removeEventListener("pointercancel", endDrag);
+  }, [onWindowMove]);
+
+  const onPointerDown = (e: React.PointerEvent) => {
+    e.preventDefault(); // stop text/image selection + scroll from stealing the gesture
+    dragging.current = true;
+    rectRef.current = containerRef.current?.getBoundingClientRect() ?? null; // cache once per drag
+    schedule(e.clientX);
+    window.addEventListener("pointermove", onWindowMove);
+    window.addEventListener("pointerup", endDrag);
+    window.addEventListener("pointercancel", endDrag);
   };
 
-  React.useEffect(
-    () => () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    },
-    [],
-  );
+  React.useEffect(() => endDrag, [endDrag]); // cleanup on unmount
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowLeft") apply(posRef.current - 4);
     if (e.key === "ArrowRight") apply(posRef.current + 4);
@@ -217,12 +224,8 @@ function BaSlider({
     <div
       ref={containerRef}
       onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={stop}
-      onPointerCancel={stop}
-      onPointerLeave={stop}
-      className="relative w-full cursor-ew-resize touch-none select-none overflow-hidden bg-cream-deep"
-      style={{ aspectRatio: "4/3" }}
+      className="relative w-full cursor-ew-resize select-none overflow-hidden bg-cream-deep"
+      style={{ aspectRatio: "4/3", touchAction: "none" }}
     >
       {/* AFTER (full) */}
       <SafeImage src={after} alt={afterLabel} ratio="4/3" className="absolute inset-0 h-full w-full" />
