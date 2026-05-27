@@ -224,7 +224,7 @@ function BaSlider({
     <div
       ref={containerRef}
       onPointerDown={onPointerDown}
-      className="relative w-full cursor-ew-resize select-none overflow-hidden bg-cream-deep"
+      className="ba-slider relative w-full cursor-ew-resize select-none overflow-hidden bg-cream-deep"
       style={{ aspectRatio: "4/3", touchAction: "none" }}
     >
       {/* AFTER (full) */}

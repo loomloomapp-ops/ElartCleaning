@@ -176,6 +176,21 @@ input[type="range"]::-moz-range-thumb {
   .elart-preloader[data-phase="exit"] { transform: none; }
 }
 
+/* before/after comparison slider — kill native touch gestures across the whole
+   subtree (touch-action does NOT inherit, so children would otherwise re-enable
+   scrolling/gestures and cancel the drag on iOS) */
+.ba-slider,
+.ba-slider * {
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+.ba-slider img {
+  -webkit-user-drag: none;
+  pointer-events: none; /* pointerdown always lands on the slider, never the image */
+}
+
 /* horizontal sliders: hide the scrollbar but keep native sw/scroll behaviour */
 .no-scrollbar {
   -ms-overflow-style: none;
