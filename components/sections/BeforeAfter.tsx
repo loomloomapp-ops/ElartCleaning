@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { MessageCircle, MoveHorizontal } from "lucide-react";
+import { ChevronDown, MessageCircle, MoveHorizontal } from "lucide-react";
 import { Container, Chip } from "@/components/primitives";
 import { SafeImage } from "@/components/primitives/SafeImage";
 import { FadeUp } from "@/components/motion";
@@ -287,11 +287,21 @@ function CaseCard({ item }: { item: CaseItem }) {
 
 /* ---------- section ---------- */
 
+const INITIAL_COUNT = 2;
+
 export function BeforeAfter() {
   const { pick } = useI18n();
   const [active, setActive] = React.useState("all");
+  const [expanded, setExpanded] = React.useState(false);
+
+  const selectFilter = (id: string) => {
+    setActive(id);
+    setExpanded(false); // collapse again when the filter changes
+  };
 
   const filtered = active === "all" ? CASES : CASES.filter((c) => c.category === active);
+  const visible = expanded ? filtered : filtered.slice(0, INITIAL_COUNT);
+  const hidden = filtered.length - visible.length;
 
   const finalWa = buildWhatsAppUrl(
     pick({
@@ -325,7 +335,7 @@ export function BeforeAfter() {
             <button
               key={f.id}
               type="button"
-              onClick={() => setActive(f.id)}
+              onClick={() => selectFilter(f.id)}
               aria-pressed={active === f.id}
               className={cn(
                 "rounded-full border px-4 py-2 text-b3 font-semibold transition",
@@ -341,10 +351,30 @@ export function BeforeAfter() {
 
         {/* cards */}
         <FadeUp className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          {filtered.map((item) => (
+          {visible.map((item) => (
             <CaseCard key={item.id} item={item} />
           ))}
         </FadeUp>
+
+        {/* show more / less */}
+        {filtered.length > INITIAL_COUNT && (
+          <div className="flex justify-center">
+            <button
+              type="button"
+              onClick={() => setExpanded((v) => !v)}
+              className="inline-flex items-center gap-2 rounded-full border border-ink/15 bg-surface px-6 py-3 text-b3 font-bold uppercase tracking-wide text-ink transition hover:border-ink/40 active:scale-[0.98]"
+            >
+              {expanded
+                ? pick(t("Pokaż mniej", "Show less"))
+                : pick(t(`Pokaż więcej (${hidden})`, `Show more (${hidden})`))}
+              <ChevronDown
+                size={18}
+                strokeWidth={2.2}
+                className={cn("transition-transform duration-300", expanded && "rotate-180")}
+              />
+            </button>
+          </div>
+        )}
 
         {/* final CTA */}
         <div className="relative overflow-hidden rounded-4xl border border-ink/8 bg-gradient-to-br from-burgundy-800 via-burgundy-800 to-burgundy-900 px-6 py-10 md:px-12 md:py-12">
