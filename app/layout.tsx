@@ -3,6 +3,7 @@ import { Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import { I18nProvider } from "@/lib/i18n";
 import { PopupProvider } from "@/components/widgets/PopupProvider";
+import { Preloader } from "@/components/widgets/Preloader";
 import { SEO } from "@/lib/constants";
 
 const display = Bricolage_Grotesque({
@@ -73,6 +74,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="pl" className={`${display.variable} ${sans.variable}`}>
       <body className="bg-paper text-ink antialiased">
+        <Preloader />
         <a
           href="#top"
           className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[120] focus:rounded-full focus:bg-ink focus:text-paper focus:px-4 focus:py-2 focus:text-sm"

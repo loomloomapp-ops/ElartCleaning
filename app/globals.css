@@ -65,6 +65,146 @@ input[type="range"]::-moz-range-thumb {
   cursor: ew-resize;
 }
 
+/* ------------------------------------------------------------------ */
+/* Brand preloader — "squeegee wipe"                                   */
+/* ------------------------------------------------------------------ */
+.elart-preloader {
+  --pre-bg: #fdf8f1;
+  --pre-ink: #1b0408;
+  --pre-accent: #ccb170;
+  --pre-logo-size: clamp(72px, 16vw, 120px);
+  --pre-duration: 1.25s;
+
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  background: var(--pre-bg);
+  overflow: hidden;
+  transition: transform 0.8s cubic-bezier(0.83, 0, 0.17, 1),
+    opacity 0.8s cubic-bezier(0.83, 0, 0.17, 1);
+  will-change: transform, opacity;
+}
+.elart-preloader[data-phase="exit"] {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.elart-preloader__inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.elart-preloader__logo {
+  position: relative;
+  width: var(--pre-logo-size);
+  height: var(--pre-logo-size);
+}
+.elart-preloader__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+/* dim, frosted copy that sits underneath */
+.elart-preloader__img--frost {
+  filter: grayscale(0.6) brightness(1.05) blur(3px);
+  opacity: 0.28;
+}
+/* crisp copy, revealed left→right as the squeegee passes */
+.elart-preloader__img--clear {
+  clip-path: inset(0 100% 0 0);
+  animation: preReveal var(--pre-duration) cubic-bezier(0.65, 0, 0.35, 1) 0.15s forwards;
+}
+
+.elart-preloader__word {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.45em;
+  text-indent: 0.45em;
+  text-transform: uppercase;
+  color: var(--pre-ink);
+  opacity: 0;
+  animation: preWord 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.85s forwards;
+}
+
+/* the squeegee bar that sweeps across the whole screen */
+.elart-preloader__squeegee {
+  position: absolute;
+  top: -10%;
+  left: 0;
+  width: 2px;
+  height: 120%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--pre-accent) 18%,
+    var(--pre-accent) 82%,
+    transparent
+  );
+  box-shadow: 0 0 28px 6px rgba(204, 177, 80, 0.45);
+  opacity: 0;
+  animation: preSqueegee var(--pre-duration) cubic-bezier(0.65, 0, 0.35, 1) 0.15s forwards;
+}
+
+@keyframes preReveal {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+@keyframes preSqueegee {
+  0% { left: -8%; opacity: 0; }
+  12% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { left: 108%; opacity: 0; }
+}
+@keyframes preWord {
+  from { opacity: 0; transform: translateY(8px); letter-spacing: 0.7em; }
+  to { opacity: 0.72; transform: translateY(0); letter-spacing: 0.45em; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .elart-preloader__img--clear { clip-path: inset(0 0 0 0); animation: none; }
+  .elart-preloader__squeegee { display: none; }
+  .elart-preloader__word { opacity: 0.72; animation: none; }
+  .elart-preloader { transition: opacity 0.4s ease; }
+  .elart-preloader[data-phase="exit"] { transform: none; }
+}
+
+/* horizontal sliders: hide the scrollbar but keep native sw/scroll behaviour */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* swipe hint — hand glides sideways, arrows pulse in the same direction */
+@keyframes swipeFinger {
+  0%, 100% { transform: translateX(-16px) rotate(-6deg); }
+  50% { transform: translateX(20px) rotate(4deg); }
+}
+@keyframes swipeArrows {
+  0%, 100% { opacity: 0.3; transform: translateX(-4px); }
+  50% { opacity: 1; transform: translateX(4px); }
+}
+.swipe-finger {
+  animation: swipeFinger 1.5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+.swipe-arrows {
+  animation: swipeArrows 1.5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .swipe-finger,
+  .swipe-arrows { animation: none; }
+}
+
 .link-underline {
   position: relative;
   display: inline-flex;
