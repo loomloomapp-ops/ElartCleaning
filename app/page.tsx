@@ -5,6 +5,7 @@ import { ServicesMarquee } from "@/components/sections/ServicesMarquee";
 import { WhyUs } from "@/components/sections/WhyUs";
 import { Reviews } from "@/components/sections/Reviews";
 import { Plans } from "@/components/sections/Plans";
+import { PriceList } from "@/components/sections/PriceList";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { MeetTeam } from "@/components/sections/MeetTeam";
 import { BeforeAfter } from "@/components/sections/BeforeAfter";
@@ -24,6 +25,7 @@ export default function HomePage() {
         <WhyUs />
         <Reviews />
         <Plans />
+        <PriceList />
         <HowItWorks />
         <MeetTeam />
         <BeforeAfter />

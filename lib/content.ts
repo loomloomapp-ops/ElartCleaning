@@ -238,6 +238,293 @@ export const PRICES_NOTE = t(
   "Final price depends on scope, area, level of soiling and deadline. Message us — we'll prepare a clear quote.",
 );
 
+/* -------------------------------------------------------------------------- */
+/*  PEŁNY CENNIK — pełny katalog usług i cen z briefu (5 sektorów)            */
+/* -------------------------------------------------------------------------- */
+
+export type PriceRow = {
+  name: Bi;
+  price: Bi;
+  /** true → "wycena indywidualna" (renderowane jako stonowana, kursywa) */
+  quote?: boolean;
+};
+export type PriceGroup = { label: Bi; rows: PriceRow[] };
+export type PriceSector = {
+  num: string;
+  title: Bi;
+  subtitle: Bi;
+  groups: PriceGroup[];
+};
+
+const QUOTE = t("wycena indywidualna", "individual quote");
+
+export const PRICE_CATALOG: PriceSector[] = [
+  {
+    num: "01",
+    title: t("Sprzątanie", "Cleaning"),
+    subtitle: t("Cleaning profesjonalny", "Professional cleaning"),
+    groups: [
+      {
+        label: t("Biura", "Offices"),
+        rows: [
+          {
+            name: t(
+              "Ekspres — strefy robocze, odkurzanie, mycie podłóg, wywóz śmieci",
+              "Express — work zones, vacuuming, floor mopping, trash removal",
+            ),
+            price: t("7 zł/m²", "7 zł/m²"),
+          },
+          {
+            name: t(
+              "Standard — mycie okien, generalne, cokoły, dezynfekcja, strefa kuchenna",
+              "Standard — windows, deep clean, baseboards, disinfection, kitchen zone",
+            ),
+            price: t("13,50–20 zł/m²", "13.50–20 zł/m²"),
+          },
+          {
+            name: t(
+              "Premium — generalne + chemia tapicerki i wykładzin biurowych",
+              "Premium — deep clean + upholstery & office carpet chemistry",
+            ),
+            price: t("21–32 zł/m²", "21–32 zł/m²"),
+          },
+        ],
+      },
+      {
+        label: t("Salony kosmetyczne", "Beauty salons"),
+        rows: [
+          {
+            name: t(
+              "Ekspres — między klientami: powierzchnie, podłogi, lustra, toaleta",
+              "Express — between clients: surfaces, floors, mirrors, toilet",
+            ),
+            price: t("od 4 zł/m²", "from 4 zł/m²"),
+          },
+          {
+            name: t(
+              "Standard — pełne sprzątanie sali i gabinetów, dezynfekcja stanowisk",
+              "Standard — full clean of rooms and cabins, station disinfection",
+            ),
+            price: t("od 7 zł/m²", "from 7 zł/m²"),
+          },
+          {
+            name: t(
+              "Premium — mycie okien, czyszczenie sprzętu, dezynfekcja całości, usuwanie zapachów",
+              "Premium — windows, equipment cleaning, full disinfection, odour removal",
+            ),
+            price: t("od 10 zł/m²", "from 10 zł/m²"),
+          },
+        ],
+      },
+      {
+        label: t("Po remoncie (mieszkanie / dom / biuro)", "Post-renovation (flat / house / office)"),
+        rows: [
+          {
+            name: t(
+              "Lekkie zabrudzenia — głównie pył i drobne plamy",
+              "Light soiling — mostly dust and minor stains",
+            ),
+            price: t("od 7 zł/m²", "from 7 zł/m²"),
+          },
+          {
+            name: t(
+              "Ciężkie zabrudzenia — gruz, tynk, resztki farby",
+              "Heavy soiling — debris, plaster, paint residue",
+            ),
+            price: t("od 12 zł/m²", "from 12 zł/m²"),
+          },
+        ],
+      },
+      {
+        label: t("Inne obiekty", "Other properties"),
+        rows: [
+          {
+            name: t(
+              "Sprzątanie mieszkań i domów (jednorazowe / cykliczne)",
+              "Apartment & house cleaning (one-off / recurring)",
+            ),
+            price: QUOTE,
+            quote: true,
+          },
+          {
+            name: t("Sprzątanie lokali komercyjnych", "Commercial unit cleaning"),
+            price: QUOTE,
+            quote: true,
+          },
+          {
+            name: t("Sprzątanie hal i magazynów", "Warehouse & hall cleaning"),
+            price: QUOTE,
+            quote: true,
+          },
+          {
+            name: t("Sprzątanie po wynajmie (zdanie lokalu)", "Post-tenancy cleaning (handover)"),
+            price: QUOTE,
+            quote: true,
+          },
+          {
+            name: t("Sprzątanie po przeprowadzce", "Post-move cleaning"),
+            price: QUOTE,
+            quote: true,
+          },
+        ],
+      },
+      {
+        label: t("Usługi dodatkowe", "Add-on services"),
+        rows: [
+          { name: t("Balkon mały (do 7 m²)", "Small balcony (up to 7 m²)"), price: t("30 zł", "30 zł") },
+          { name: t("Balkon duży (8–14 m²)", "Large balcony (8–14 m²)"), price: t("60 zł", "60 zł") },
+          { name: t("Taras (od 15 m²)", "Terrace (from 15 m²)"), price: t("80 zł", "80 zł") },
+          { name: t("Prasowanie", "Ironing"), price: t("50 zł", "50 zł") },
+          { name: t("Mycie ścian", "Wall washing"), price: t("4 zł/m²", "4 zł/m²") },
+          { name: t("Czyszczenie fug", "Grout cleaning"), price: t("2 zł/m²", "2 zł/m²") },
+          { name: t("Mycie lodówki", "Fridge cleaning"), price: t("60 zł", "60 zł") },
+          { name: t("Mycie piekarnika", "Oven cleaning"), price: t("70–120 zł", "70–120 zł") },
+          { name: t("Mycie mikrofalówki", "Microwave cleaning"), price: t("30 zł", "30 zł") },
+          { name: t("Mycie okapu", "Range hood cleaning"), price: t("55 zł", "55 zł") },
+          { name: t("Mycie szafek kuchennych", "Kitchen cabinet cleaning"), price: t("100–200 zł", "100–200 zł") },
+          { name: t("Dodatkowa łazienka", "Additional bathroom"), price: t("od 150 zł", "from 150 zł") },
+          { name: t("Czyszczenie kuwety dla zwierząt", "Pet litter box cleaning"), price: t("10 zł", "10 zł") },
+        ],
+      },
+    ],
+  },
+  {
+    num: "02",
+    title: t("Czyszczenie tapicerki", "Upholstery cleaning"),
+    subtitle: t(
+      "Pranie chemiczne — meble tapicerowane domowe",
+      "Chemical washing — home upholstered furniture",
+    ),
+    groups: [
+      {
+        label: t("Materace", "Mattresses"),
+        rows: [
+          { name: t("Materac jednoosobowy — jedna strona", "Single mattress — one side"), price: t("150 zł", "150 zł") },
+          { name: t("Materac jednoosobowy — obie strony", "Single mattress — both sides"), price: t("300 zł", "300 zł") },
+          { name: t("Materac dwuosobowy — jedna strona", "Double mattress — one side"), price: t("250 zł", "250 zł") },
+          { name: t("Materac dwuosobowy — obie strony", "Double mattress — both sides"), price: t("od 500 zł", "from 500 zł") },
+        ],
+      },
+      {
+        label: t("Poduszki", "Pillows"),
+        rows: [
+          { name: t("Poduszka mała (30–40 cm)", "Small pillow (30–40 cm)"), price: t("15 zł/szt.", "15 zł/pc.") },
+          { name: t("Poduszka średnia", "Medium pillow"), price: t("25 zł/szt.", "25 zł/pc.") },
+          { name: t("Poduszka duża", "Large pillow"), price: t("30 zł/szt.", "30 zł/pc.") },
+        ],
+      },
+      {
+        label: t("Dywany i wykładziny", "Rugs & carpets"),
+        rows: [
+          { name: t("Dywan syntetyczny / krótkie włosie", "Synthetic rug / short pile"), price: t("od 18 zł/m²", "from 18 zł/m²") },
+          { name: t("Dywan z długim włosiem", "Long-pile rug"), price: t("od 25 zł/m²", "from 25 zł/m²") },
+        ],
+      },
+      {
+        label: t("Kanapy i narożniki", "Sofas & corner sofas"),
+        rows: [
+          { name: t("Mała sofa 2-osobowa (do ok. 200 cm)", "Small 2-seat sofa (up to ~200 cm)"), price: t("200 zł", "200 zł") },
+          { name: t("Mała sofa 2-osobowa rozkładana (funkcja spania)", "Small 2-seat sofa bed (sleeper)"), price: t("250 zł", "250 zł") },
+          { name: t("Duża sofa 3-osobowa (do ok. 250 cm)", "Large 3-seat sofa (up to ~250 cm)"), price: t("300 zł", "300 zł") },
+          { name: t("Duża sofa 3-osobowa rozkładana (funkcja spania)", "Large 3-seat sofa bed (sleeper)"), price: t("350 zł", "350 zł") },
+          { name: t("Sofa narożna", "Corner sofa"), price: t("od 250 zł", "from 250 zł") },
+          { name: t("Bok łóżka / wyłożyna (miękka część łóżka)", "Bed side / upholstered bed base"), price: t("od 100 zł", "from 100 zł") },
+        ],
+      },
+      {
+        label: t("Fotele i krzesła", "Armchairs & chairs"),
+        rows: [
+          { name: t("Fotel", "Armchair"), price: t("od 60 zł", "from 60 zł") },
+          { name: t("Krzesło", "Chair"), price: t("od 45 zł", "from 45 zł") },
+        ],
+      },
+      {
+        label: t("Pozostałe", "Other"),
+        rows: [
+          { name: t("Wózki dziecięce", "Baby strollers"), price: t("od 100 zł", "from 100 zł") },
+          { name: t("Tapicerka samochodowa", "Car interior upholstery"), price: t("od 100 zł", "from 100 zł") },
+        ],
+      },
+    ],
+  },
+  {
+    num: "03",
+    title: t("Mycie okien", "Window cleaning"),
+    subtitle: t(
+      "Powierzchnie szklane — prywatne i komercyjne",
+      "Glass surfaces — private and commercial",
+    ),
+    groups: [
+      {
+        label: t("Oferta komercyjna (duże powierzchnie)", "Commercial offer (large areas)"),
+        rows: [
+          { name: t("Mycie komercyjne — jednostronne", "Commercial cleaning — one side"), price: t("od 6 zł/m²", "from 6 zł/m²") },
+          { name: t("Mycie po remoncie — jednostronne", "Post-renovation cleaning — one side"), price: t("od 8 zł/m²", "from 8 zł/m²") },
+        ],
+      },
+      {
+        label: t("Oferta prywatna (mieszkania, domy)", "Private offer (flats, houses)"),
+        rows: [
+          { name: t("Okno 1-skrzydłowe", "Single-sash window"), price: t("od 30 zł", "from 30 zł") },
+          { name: t("Okno 2-skrzydłowe", "Double-sash window"), price: t("od 60 zł", "from 60 zł") },
+          { name: t("Okno 3-skrzydłowe", "Triple-sash window"), price: t("od 90 zł", "from 90 zł") },
+          { name: t("Okno panoramiczne", "Panoramic window"), price: t("od 45 zł", "from 45 zł") },
+          { name: t("Drzwi balkonowe", "Balcony door"), price: t("od 45 zł", "from 45 zł") },
+          { name: t("Mycie żaluzji fasadowych", "Façade blinds cleaning"), price: t("od 20 zł/m²", "from 20 zł/m²") },
+          { name: t("Mycie rolet zewnętrznych", "External roller shutter cleaning"), price: t("od 8 zł/m²", "from 8 zł/m²") },
+        ],
+      },
+      {
+        label: t("Praca na wysokości (podnośnik)", "Work at height (boom lift)"),
+        rows: [
+          { name: t("Mycie okien na wysokości — praca z podnośnikiem", "Window cleaning at height — boom-lift work"), price: QUOTE, quote: true },
+          { name: t("Elewacje i fasady szklane na dużych wysokościach", "Façades and glass elevations at great heights"), price: QUOTE, quote: true },
+        ],
+      },
+    ],
+  },
+  {
+    num: "04",
+    title: t("Transport & Przeprowadzki", "Transport & Moving"),
+    subtitle: t(
+      "Przewóz mebli i towarów — Poznań i cała Polska",
+      "Furniture & goods transport — Poznań and all of Poland",
+    ),
+    groups: [
+      {
+        label: t("Transport i przeprowadzki", "Transport & moves"),
+        rows: [
+          { name: t("Przewóz mebli", "Furniture transport"), price: QUOTE, quote: true },
+          { name: t("Transport towarów i materiałów", "Goods & materials transport"), price: QUOTE, quote: true },
+          { name: t("Przeprowadzki mieszkaniowe", "Home moves"), price: QUOTE, quote: true },
+          { name: t("Przeprowadzki biurowe", "Office moves"), price: QUOTE, quote: true },
+          { name: t("Wnoszenie i wynoszenie", "Carry-in and carry-out"), price: QUOTE, quote: true },
+          { name: t("Montaż i demontaż mebli", "Furniture assembly & disassembly"), price: QUOTE, quote: true },
+          { name: t("Wywóz odpadów i gruzu na wysypisko", "Waste & debris removal to the dump"), price: QUOTE, quote: true },
+        ],
+      },
+    ],
+  },
+  {
+    num: "05",
+    title: t("Magazynowanie", "Storage"),
+    subtitle: t(
+      "Przechowywanie towaru i mienia — obiekt strzeżony, ogrzewany",
+      "Storage of goods and belongings — guarded, heated facility",
+    ),
+    groups: [
+      {
+        label: t("Przechowywanie", "Storage"),
+        rows: [
+          { name: t("Przechowywanie towaru", "Goods storage"), price: QUOTE, quote: true },
+          { name: t("Przechowywanie mebli i rzeczy", "Furniture & belongings storage"), price: QUOTE, quote: true },
+          { name: t("Magazynowanie materiałów budowlanych", "Construction material storage"), price: QUOTE, quote: true },
+        ],
+      },
+    ],
+  },
+];
+
 export const HOW_STEPS = [
   {
     title: t("Szybki kontakt i analiza potrzeb", "Quick contact and needs analysis"),
