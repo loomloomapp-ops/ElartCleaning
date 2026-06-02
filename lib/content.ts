@@ -343,8 +343,7 @@ export const PRICE_CATALOG: PriceSector[] = [
               "Sprzątanie mieszkań i domów (jednorazowe / cykliczne)",
               "Apartment & house cleaning (one-off / recurring)",
             ),
-            price: QUOTE,
-            quote: true,
+            price: t("od 179 zł", "from 179 zł"),
           },
           {
             name: t("Sprzątanie lokali komercyjnych", "Commercial unit cleaning"),
@@ -521,6 +520,334 @@ export const PRICE_CATALOG: PriceSector[] = [
           { name: t("Magazynowanie materiałów budowlanych", "Construction material storage"), price: QUOTE, quote: true },
         ],
       },
+    ],
+  },
+];
+
+/* ------------------------------------------------------------------ *
+ * Pakiety sprzątania mieszkań — najczęściej wybierane usługi.
+ * Karta pokazuje cenę i skrót; przycisk "Szczegóły" otwiera popup
+ * z pełnym zakresem (na podstawie cenników dostarczonych przez klienta).
+ * ------------------------------------------------------------------ */
+export type PackageGroup = { label: Bi; items: Bi[] };
+export type CleaningPackage = {
+  key: string;
+  name: Bi;
+  tagline: Bi;
+  price: Bi;
+  unit: Bi;
+  addons: Bi[];
+  groups: PackageGroup[];
+  perks?: Bi[];
+  notes: Bi[];
+  footnote?: Bi;
+  highlight?: boolean;
+};
+
+export const PACKAGES_HEADING = {
+  chip: t("Pakiety sprzątania", "Cleaning packages"),
+  title: t("Sprzątanie mieszkań — pakiety i ceny", "Apartment cleaning — packages & prices"),
+  subtitle: t(
+    "Najczęściej wybierane sprzątania mieszkań — od szybkiego odświeżenia po kompleksowe All Inclusive. Kliknij „Szczegóły”, aby zobaczyć pełen zakres pakietu.",
+    "Our most popular apartment cleanings — from a quick refresh to complete All Inclusive. Tap “Details” to see the full scope of each package.",
+  ),
+};
+
+export const PACKAGES_UI = {
+  details: t("Szczegóły", "Details"),
+  perksLabel: t("Atuty naszej usługi", "Why it's worth it"),
+  notesLabel: t("Ważne informacje", "Good to know"),
+  addonsLabel: t("Dopłaty", "Add-ons"),
+  whatsapp: t("Napisz na WhatsApp", "Message on WhatsApp"),
+  from: t("od", "from"),
+  popular: t("Najczęściej wybierany", "Most popular"),
+};
+
+export const CLEANING_PACKAGES: CleaningPackage[] = [
+  {
+    key: "ekspres",
+    name: t("Sprzątanie Ekspresowe", "Express Cleaning"),
+    tagline: t("Idealne do regularnego utrzymania czystości", "Perfect for regular upkeep"),
+    price: t("179 zł", "179 zł"),
+    unit: t("kawalerka", "studio flat"),
+    addons: [
+      t("Dodatkowa sypialnia: +50 zł", "Extra bedroom: +50 zł"),
+      t("Sierść zwierząt: +70 zł", "Pet hair: +70 zł"),
+    ],
+    groups: [
+      {
+        label: t("Kuchnia", "Kitchen"),
+        items: [
+          t("Mycie zlewu i baterii", "Sink and tap washing"),
+          t("Płyta indukcyjna/gazowa", "Induction/gas hob"),
+          t("Sprzęty z zewnątrz", "Appliances (outside)"),
+          t("Mikrofalówka i piekarnik (fronty)", "Microwave & oven (fronts)"),
+        ],
+      },
+      {
+        label: t("Łazienka", "Bathroom"),
+        items: [
+          t("Mycie umywalki i baterii", "Washbasin and tap washing"),
+          t("Lustro", "Mirror"),
+          t("Podłogi", "Floors"),
+        ],
+      },
+      {
+        label: t("Pokoje", "Rooms"),
+        items: [
+          t("Przetarcie szafek nocnych", "Wiping nightstands"),
+          t("Ścielenie łóżka", "Making the bed"),
+          t("Lekkie uporządkowanie rzeczy", "Light tidying up"),
+          t("Odkurzanie i mycie podłóg", "Vacuuming and mopping floors"),
+        ],
+      },
+      {
+        label: t("Przedpokój", "Hallway"),
+        items: [
+          t("Odkurzanie i mycie podłogi", "Vacuuming and mopping the floor"),
+          t("Przetarcie szafki (jeśli jest)", "Wiping the cabinet (if any)"),
+        ],
+      },
+    ],
+    footnote: t(
+      "Usługa dla mieszkań w dobrym stanie, bez silnych zabrudzeń.",
+      "For apartments in good condition, without heavy soiling.",
+    ),
+    notes: [
+      t("Nie przestawiamy ciężkich mebli", "We don't move heavy furniture"),
+      t("Nie dotykamy monitorów ani telewizorów", "We don't touch monitors or TVs"),
+      t("Cena ustalana indywidualnie dla większych mieszkań", "Price set individually for larger apartments"),
+    ],
+  },
+  {
+    key: "dokladne",
+    name: t("Sprzątanie Dokładne", "Thorough Cleaning"),
+    tagline: t("Pełne czyszczenie wszystkich pomieszczeń", "Full cleaning of every room"),
+    price: t("329 zł", "329 zł"),
+    unit: t("kawalerka", "studio flat"),
+    addons: [
+      t("Dodatkowa sypialnia: +70 zł", "Extra bedroom: +70 zł"),
+      t("Sierść zwierząt: +70 zł", "Pet hair: +70 zł"),
+    ],
+    groups: [
+      {
+        label: t("Kuchnia", "Kitchen"),
+        items: [
+          t("Mycie frontów (bez starego tłuszczu)", "Washing fronts (excl. old grease)"),
+          t("Mycie zlewu i baterii", "Sink and tap washing"),
+          t("Czyszczenie płyty", "Hob cleaning"),
+          t("Sprzęty i backsplash", "Appliances and backsplash"),
+          t("Wynoszenie śmieci", "Taking out the rubbish"),
+        ],
+      },
+      {
+        label: t("Łazienka", "Bathroom"),
+        items: [
+          t("Usuwanie lekkiego kamienia", "Removing light limescale"),
+          t("Umywalka, wanna/kabina", "Washbasin, bath/shower"),
+          t("Toaleta (powierzchniowo)", "Toilet (surface)"),
+          t("Lustro", "Mirror"),
+          t("Szafki i otwarte półki", "Cabinets and open shelves"),
+          t("Grzejnik zewnętrznie", "Radiator (outside)"),
+          t("Podłogi", "Floors"),
+        ],
+      },
+      {
+        label: t("Pokoje", "Rooms"),
+        items: [
+          t("Przetarcie mebli z zewnątrz, lustra", "Wiping furniture (outside), mirrors"),
+          t("Komody, szafki nocne", "Dressers, nightstands"),
+          t("Zmiana pościeli / ścielenie łóżka", "Changing bedding / making the bed"),
+          t("Odkurzanie i mycie podłóg", "Vacuuming and mopping floors"),
+        ],
+      },
+      {
+        label: t("Przedpokój", "Hallway"),
+        items: [
+          t("Przetarcie szafy z zewnątrz", "Wiping the wardrobe (outside)"),
+          t("Półki", "Shelves"),
+          t("Odkurzanie i mycie podłogi", "Vacuuming and mopping the floor"),
+        ],
+      },
+    ],
+    notes: [
+      t("Nie przestawiamy ciężkich mebli", "We don't move heavy furniture"),
+      t("Nie dotykamy monitorów ani telewizorów", "We don't touch monitors or TVs"),
+      t("Usługa dla mieszkań wymagających pełnego czyszczenia", "For apartments that need a full clean"),
+    ],
+  },
+  {
+    key: "generalne-express",
+    name: t("Generalne Express", "General Express"),
+    tagline: t("Gruntowne sprzątanie bez zbędnych dodatków", "Deep cleaning without the extras"),
+    price: t("529 zł", "529 zł"),
+    unit: t("kuchnia + salon + sypialnia", "kitchen + living room + bedroom"),
+    addons: [t("Dodatkowy pokój: +90 zł", "Extra room: +90 zł")],
+    groups: [
+      {
+        label: t("Kuchnia", "Kitchen"),
+        items: [
+          t("Mycie frontów szafek", "Washing cabinet fronts"),
+          t("Zlew, bateria, blaty", "Sink, tap, countertops"),
+          t("Płyta, okap, mikrofalówka", "Hob, hood, microwave"),
+          t("Piekarnik (bez blachy i rusztów)", "Oven (excl. tray and racks)"),
+          t("Backsplash, kafelki", "Backsplash, tiles"),
+          t("Wyniesienie śmieci", "Taking out the rubbish"),
+        ],
+      },
+      {
+        label: t("Łazienka", "Bathroom"),
+        items: [
+          t("Umywalka, wanna/kabina", "Washbasin, bath/shower"),
+          t("Toaleta, lustro", "Toilet, mirror"),
+          t("Kafelki i fugi", "Tiles and grout"),
+          t("Usuwanie kamienia", "Limescale removal"),
+        ],
+      },
+      {
+        label: t("Pokoje", "Rooms"),
+        items: [
+          t("Meble, lustra, komody", "Furniture, mirrors, dressers"),
+          t("Ścielenie łóżka", "Making the bed"),
+          t("Odkurzanie i mycie podłogi", "Vacuuming and mopping the floor"),
+          t("Szafa z zewnątrz", "Wardrobe (outside)"),
+        ],
+      },
+      {
+        label: t("Przedpokój", "Hallway"),
+        items: [t("Odkurzanie i mycie podłogi", "Vacuuming and mopping the floor")],
+      },
+      {
+        label: t("Dopłaty do piekarnika", "Oven add-ons"),
+        items: [
+          t("Blacha do pieczenia: +40 zł/szt.", "Baking tray: +40 zł each"),
+          t("Ruszt: +15 zł/szt.", "Rack: +15 zł each"),
+        ],
+      },
+    ],
+    notes: [
+      t("Nie przestawiamy ciężkich mebli", "We don't move heavy furniture"),
+      t("Nie dotykamy monitorów ani telewizorów", "We don't touch monitors or TVs"),
+      t("Bez mycia wnętrza lodówek i szafek", "Excludes washing inside fridges and cabinets"),
+    ],
+  },
+  {
+    key: "generalne",
+    name: t("Sprzątanie Generalne", "General Cleaning"),
+    tagline: t("Dogłębne czyszczenie każdej powierzchni", "Deep clean of every surface"),
+    price: t("689 zł", "689 zł"),
+    unit: t("1 pokój + kuchnia + łazienka", "1 room + kitchen + bathroom"),
+    addons: [t("Każdy dodatkowy pokój: +100 zł", "Each extra room: +100 zł")],
+    highlight: true,
+    groups: [
+      {
+        label: t("W zakres usługi wchodzi", "What's included"),
+        items: [
+          t("Wszystko z pakietu Sprzątanie Dokładne, a dodatkowo:", "Everything from Thorough Cleaning, plus:"),
+          t("Mycie wnętrza szaf, szuflad i półek", "Washing inside wardrobes, drawers and shelves"),
+          t(
+            "Czyszczenie AGD z zewnątrz i wewnątrz (mikrofalówka, piekarnik, lodówka)",
+            "Cleaning appliances inside and out (microwave, oven, fridge)",
+          ),
+          t("Przecieranie drzwi, klamek i włączników światła", "Wiping doors, handles and light switches"),
+          t("Czyszczenie parownicą — usunięcie plam i kurzu", "Steam cleaning — removing stains and dust"),
+          t("Mycie frontów kuchennych, okapu i płytek", "Washing kitchen fronts, hood and tiles"),
+          t("Dokładne czyszczenie łazienki, prysznica, fug", "Thorough cleaning of bathroom, shower, grout"),
+          t("Mycie ścian i fug (na życzenie)", "Washing walls and grout (on request)"),
+        ],
+      },
+    ],
+    perks: [
+      t("Zdjęcia «przed i po» po zakończeniu pracy", "Before & after photos on completion"),
+      t("Gwarancja poprawek, jeśli coś zostanie pominięte", "Re-do guarantee if anything is missed"),
+      t("Konsultacja dotycząca pielęgnacji mebli i powierzchni", "Advice on caring for furniture and surfaces"),
+    ],
+    notes: [
+      t("Nie przestawiamy ciężkich mebli", "We don't move heavy furniture"),
+      t("Nie dotykamy monitorów ani telewizorów", "We don't touch monitors or TVs"),
+      t("Idealne przed świętami lub po wizycie gości", "Perfect before the holidays or after guests"),
+    ],
+  },
+  {
+    key: "all-inclusive",
+    name: t("Sprzątanie All Inclusive", "All Inclusive"),
+    tagline: t(
+      "Ekskluzywny pakiet — kompleksowe sprzątanie w jeden dzień",
+      "Exclusive package — complete cleaning in one day",
+    ),
+    price: t("1050 zł", "1050 zł"),
+    unit: t("1 pokój + kuchnia + łazienka + korytarz", "1 room + kitchen + bathroom + hallway"),
+    addons: [
+      t("Każdy dodatkowy pokój: +100 zł", "Each extra room: +100 zł"),
+      t("Zespół 2–3 osób", "Team of 2–3 people"),
+    ],
+    groups: [
+      {
+        label: t("W zakres usługi wchodzi", "What's included"),
+        items: [
+          t("Wszystko z pakietu Sprzątania Generalnego, a dodatkowo:", "Everything from General Cleaning, plus:"),
+          t("Mycie okien, ram, parapetów i drzwi balkonowych", "Washing windows, frames, sills and balcony doors"),
+          t("Sprzątanie balkonu lub tarasu", "Cleaning the balcony or terrace"),
+          t("Aromatyzacja mebli, tkanin i powietrza", "Scenting furniture, fabrics and air"),
+          t("Polerowanie powierzchni metalowych i szklanych", "Polishing metal and glass surfaces"),
+          t("Dogłębne czyszczenie strefy kuchennej", "Deep cleaning of the kitchen zone"),
+          t("Dezynfekcja i obróbka antybakteryjna", "Disinfection and antibacterial treatment"),
+          t("Końcowa inspekcja przez menedżera", "Final inspection by a manager"),
+        ],
+      },
+    ],
+    perks: [
+      t("Osobisty menedżer projektu", "A personal project manager"),
+      t("Zespół 2–3 osób", "A team of 2–3 people"),
+      t("Pełny raport zdjęciowy i wideo", "Full photo and video report"),
+      t("Pracujemy bez ograniczeń — do perfekcyjnego efektu", "We work without limits — until it's perfect"),
+    ],
+    notes: [
+      t("Nie przestawiamy ciężkich mebli", "We don't move heavy furniture"),
+      t("Nie dotykamy monitorów ani telewizorów", "We don't touch monitors or TVs"),
+      t("Idealne przed świętami lub przed wizytą gości", "Perfect before the holidays or before guests"),
+    ],
+  },
+  {
+    key: "generalne-pojedyncze",
+    name: t("Generalne — kuchnia lub łazienka", "General — kitchen or bathroom"),
+    tagline: t("Kuchnia i łazienka — osobna wycena", "Kitchen and bathroom — priced separately"),
+    price: t("od 300 zł", "from 300 zł"),
+    unit: t("pojedyncze pomieszczenie", "a single room"),
+    addons: [],
+    groups: [
+      {
+        label: t("Kuchnia — 350 zł", "Kitchen — 350 zł"),
+        items: [
+          t("Mycie blatów roboczych i frontów szafek", "Washing worktops and cabinet fronts"),
+          t("Mycie szafek wewnątrz i na zewnątrz", "Washing cabinets inside and out"),
+          t(
+            "Czyszczenie kuchenki, okapu, mikrofalówki, piekarnika i lodówki",
+            "Cleaning the cooker, hood, microwave, oven and fridge",
+          ),
+          t("Mycie zlewu, kranu, kafelków i fartucha", "Washing the sink, tap, tiles and backsplash"),
+          t("Ścieranie kurzu i tłuszczu z urządzeń", "Wiping dust and grease off appliances"),
+          t("Mycie podłóg, listew i wyniesienie śmieci", "Mopping floors, skirting and taking out the rubbish"),
+        ],
+      },
+      {
+        label: t("Łazienka — 300 zł", "Bathroom — 300 zł"),
+        items: [
+          t(
+            "Mycie i dezynfekcja umywalki, baterii, wanny, prysznica, toalety i pralki",
+            "Washing and disinfecting basin, tap, bath, shower, toilet and washing machine",
+          ),
+          t("Czyszczenie kafelków, fug i fartucha przy umywalce/wannie", "Cleaning tiles, grout and basin/bath splashback"),
+          t("Mycie luster i szklanych powierzchni", "Washing mirrors and glass surfaces"),
+          t("Czyszczenie frontów szafek (wewnątrz i na zewnątrz)", "Cleaning cabinet fronts (inside and out)"),
+          t("Ścieranie kurzu i osadów z mebli i akcesorów", "Wiping dust and residue off furniture and accessories"),
+          t("Mycie podłóg, listew i wyniesienie śmieci", "Mopping floors, skirting and taking out the rubbish"),
+        ],
+      },
+    ],
+    notes: [
+      t("Nie przestawiamy ciężkich mebli", "We don't move heavy furniture"),
+      t("Nie dotykamy monitorów ani telewizorów", "We don't touch monitors or TVs"),
     ],
   },
 ];

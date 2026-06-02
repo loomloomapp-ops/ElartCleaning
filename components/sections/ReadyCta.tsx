@@ -14,12 +14,12 @@ export function ReadyCta() {
           <Chip tone="surface">{lang === "pl" ? "Czas na czystość" : "Ready to clean"}</Chip>
           <h2 className="font-display font-bold uppercase leading-[0.9] tracking-[-0.02em] text-[clamp(2rem,6vw,5rem)] max-w-col-6">
             {lang === "pl"
-              ? "Gotowy na czystszy i spokojniejszy dom?"
+              ? "Gotowy na czystość i spokój w domu?"
               : "Ready for a cleaner, calmer home?"}
           </h2>
           <p className="text-b1 text-ink/72 max-w-col-4">
             {lang === "pl"
-              ? "Napisz na WhatsApp — odpowiadamy w kilkanaście minut i przygotowujemy przejrzystą wycenę."
+              ? "Napisz na WhatsApp — odpowiadamy w kilkanaście minut i przygotujemy przejrzystą wycenę."
               : "Message us on WhatsApp — we reply within minutes with a clear quote."}
           </p>
           <div className="pt-2">

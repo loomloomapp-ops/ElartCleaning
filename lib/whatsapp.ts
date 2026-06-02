@@ -18,6 +18,17 @@ export function defaultQuoteMessage(lang: "pl" | "en" = "pl") {
   return `Dzień dobry Elart Cleaning, chciał(a)bym otrzymać wycenę. Czy możecie się ze mną skontaktować?`;
 }
 
+export function packageQuoteMessage(
+  name: string,
+  price: string,
+  lang: "pl" | "en" = "pl",
+): string {
+  if (lang === "en") {
+    return `Hello Elart Cleaning, I'm interested in the "${name}" package (${price}). Could you prepare a quote for me?`;
+  }
+  return `Dzień dobry Elart Cleaning, interesuje mnie pakiet „${name}” (${price}). Czy możecie przygotować dla mnie wycenę?`;
+}
+
 export type QuizAnswers = {
   service: string;
   object: string;
