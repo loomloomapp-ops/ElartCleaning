@@ -5,3 +5,6 @@ out
 .DS_Store
 *.log
 next-env.d.ts
+
+# Telegram relay with secret token (deploy manually, never commit)
+public/send-telegram.php

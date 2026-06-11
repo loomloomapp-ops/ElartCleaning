@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import { Container, Chip } from "@/components/primitives";
+import { ParallaxImage } from "@/components/primitives/ParallaxImage";
 import { SecondaryButton } from "@/components/cta";
 import { STOCK } from "@/lib/stock";
 import { ABOUT } from "@/lib/content";
@@ -14,12 +14,11 @@ export function MeetTeam() {
     <section className="bg-paper pt-section-xs">
       <Container>
         <div className="relative rounded-3xl overflow-hidden min-h-[560px] lg:min-h-[720px] flex items-end p-6 md:p-8 lg:p-10 bg-cream-deep">
-          <Image
+          <ParallaxImage
             src={STOCK.about.top}
             alt={pick(ABOUT.title)}
-            fill
             sizes="100vw"
-            className="object-cover"
+            className="absolute inset-0"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-ink/30 via-transparent to-transparent" />
 

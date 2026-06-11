@@ -1,14 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
+import { ParallaxImage } from "@/components/primitives/ParallaxImage";
 import { Star, Phone, MessageCircle, Mail, Instagram } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Container, Chip } from "@/components/primitives";
 import { PrimaryButton, SecondaryButton } from "@/components/cta";
 import { BRAND } from "@/lib/constants";
 import { useI18n } from "@/lib/i18n";
-import { STOCK } from "@/lib/stock";
 import { buildWhatsAppUrl, defaultQuoteMessage } from "@/lib/whatsapp";
 
 const SCOPES_PL = ["MIESZKAŃ", "DOMÓW", "BIUR", "LOKALI"];
@@ -103,16 +102,13 @@ export function HeroSplit() {
           </div>
 
           {/* RIGHT — image */}
-          <div className="relative aspect-[4/5] lg:aspect-auto lg:min-h-[640px] rounded-3xl overflow-hidden bg-cream-deep">
-            <Image
-              src={STOCK.heroSlides[0]}
-              alt="Elart Cleaning"
-              fill
-              priority
-              sizes="(max-width: 1024px) 100vw, 55vw"
-              className="object-cover"
-            />
-          </div>
+          <ParallaxImage
+            src="/cleaning/hero-elart.jpg"
+            alt="Elart Cleaning"
+            priority
+            sizes="(max-width: 1024px) 100vw, 55vw"
+            className="aspect-[4/5] lg:aspect-auto lg:min-h-[640px] rounded-3xl bg-cream-deep"
+          />
         </div>
 
         {/* Support 4-up grid */}
@@ -131,7 +127,7 @@ export function HeroSplit() {
             external
           />
           <SupportItem
-            icon={<Mail size={18} strokeWidth={2.4} />}
+            icon={<Mail size={18} strokeWidth={2.4} className="relative top-px" />}
             label="Email"
             value={BRAND.email}
             href={`mailto:${BRAND.email}`}

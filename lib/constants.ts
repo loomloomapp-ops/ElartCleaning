@@ -5,8 +5,9 @@ export const BRAND = {
   phoneTel: "+48577596668",
   whatsapp: "48577596668",
   email: "elartcleaning@gmail.com",
-  instagram:
-    "https://www.instagram.com/elart_cleaning?igsh=MjljYWowODNmZXpo&utm_source=qr",
+  instagram: "https://www.instagram.com/elart_cleaning/",
+  googleMaps:
+    "https://www.google.com/maps/place/Elart+Cleaning/@52.4006266,16.9016469,11z/data=!3m1!4b1!4m6!3m5!1s0x47045b3751c8f199:0x8702bd89551764ce!8m2!3d52.4006266!4d16.9016469!16s%2Fg%2F11xrww23l0",
   mapsEmbed: "[PLACEHOLDER_GOOGLE_MAPS_POZNAN]",
 };
 

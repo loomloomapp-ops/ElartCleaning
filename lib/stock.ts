@@ -24,13 +24,13 @@ export const STOCK = {
   },
 
   services: {
-    mieszkania: "/cleaning/service-apartment.jpg",
-    domy: "/cleaning/service-house.jpg",
+    mieszkania: "/cleaning/service-mieszkania.jpg",
+    domy: "/cleaning/service-domy.jpg",
     "po-remoncie": "/cleaning/service-reno.jpg",
-    biura: "/cleaning/service-office.jpg",
-    tapicerka: "/cleaning/service-upholstery.jpg",
+    biura: "/cleaning/service-biura.jpg",
+    tapicerka: "/cleaning/service-tapicerka.jpg",
     dywany: "/cleaning/service-carpet.jpg",
-    okna: "/cleaning/cat-polishing.avif",
+    okna: "/cleaning/service-okna.jpg",
     transport: "/cleaning/service-moving.jpg",
     magazyn: "/cleaning/about-extra.avif",
     abonament: "/cleaning/service-subscription.jpg",

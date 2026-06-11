@@ -12,6 +12,7 @@ import { FORM, POPUP, UI } from "@/lib/content";
 import { Eyebrow, GoldDivider } from "@/components/primitives";
 import { PrimaryButton } from "@/components/cta";
 import { buildWhatsAppUrl, buildMailto } from "@/lib/whatsapp";
+import { sendLead } from "@/lib/lead";
 import { cn } from "@/lib/utils";
 
 const schema = z.object({
@@ -19,6 +20,7 @@ const schema = z.object({
   phone: z.string().min(7).regex(/^[+()\-\s0-9]+$/),
   email: z.string().email().optional().or(z.literal("")),
   message: z.string().optional(),
+  company: z.string().optional(), // honeypot
   rodo: z.literal(true),
 });
 
@@ -42,6 +44,21 @@ export function PopupForm({
   } = useForm<Values>({ resolver: zodResolver(schema), defaultValues: { rodo: false as unknown as true } });
 
   const onSubmit = async (data: Values) => {
+    const ok = await sendLead({
+      name: data.name,
+      phone: data.phone,
+      email: data.email || undefined,
+      message: data.message || undefined,
+      source: "Popup — szybka wycena",
+      company: data.company,
+    });
+    if (ok) {
+      setSubmitted("ok");
+      reset();
+      setTimeout(() => onOpenChange(false), 1500);
+      return;
+    }
+    // Fallback so the lead still reaches the team (and for local dev w/o PHP).
     try {
       const msg = `${pick(POPUP.title)} — ${data.name}\n${pick(FORM.phone)}: ${data.phone}` +
         (data.email ? `\n${pick(FORM.email)}: ${data.email}` : "") +
@@ -99,6 +116,15 @@ export function PopupForm({
                 <GoldDivider className="mt-5" />
 
                 <form onSubmit={handleSubmit(onSubmit)} className="mt-5 space-y-4">
+                  {/* honeypot — hidden from humans, catches bots */}
+                  <input
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    aria-hidden
+                    {...register("company")}
+                    className="absolute left-[-9999px] h-0 w-0 opacity-0"
+                  />
                   <Field
                     label={pick(FORM.name)}
                     error={errors.name && pick(FORM.required)}

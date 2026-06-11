@@ -1,138 +1,27 @@
 "use client";
 
 import * as React from "react";
-import { ChevronDown, MessageCircle, MoveHorizontal } from "lucide-react";
+import { MoveHorizontal, ChevronLeft, ChevronRight } from "lucide-react";
 import { Container, Chip } from "@/components/primitives";
 import { SafeImage } from "@/components/primitives/SafeImage";
-import { FadeUp } from "@/components/motion";
-import { PrimaryButton } from "@/components/cta";
 import { useI18n } from "@/lib/i18n";
 import { UI } from "@/lib/content";
-import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { cn } from "@/lib/utils";
 
 type Bi = { pl: string; en: string };
 const t = (pl: string, en: string): Bi => ({ pl, en });
 
-const FILTERS: { id: string; label: Bi }[] = [
-  { id: "all", label: t("Wszystkie", "All") },
-  { id: "mieszkanie", label: t("Mieszkanie", "Apartment") },
-  { id: "po-remoncie", label: t("Po remoncie", "Post-reno") },
-  { id: "tapicerka", label: t("Tapicerka", "Upholstery") },
-  { id: "biuro", label: t("Biuro", "Office") },
-  { id: "przeprowadzka", label: t("Przeprowadzka", "Moving") },
-];
+type Pair = { id: string; before: string; after: string };
 
-type CaseItem = {
-  id: string;
-  category: string;
-  categoryLabel: Bi;
-  title: Bi;
-  meta: string;
-  problem: Bi;
-  done: Bi;
-  result: Bi;
-  before: string;
-  after: string;
-};
-
-const CASES: CaseItem[] = [
-  {
-    id: "tapicerka-naroznik",
-    category: "tapicerka",
-    categoryLabel: t("Tapicerka", "Upholstery"),
-    title: t("Czyszczenie narożnika po intensywnym użytkowaniu", "Corner sofa deep-clean"),
-    meta: "Poznań · Grunwald",
-    problem: t("Plamy, zapach i ślady codziennego użytkowania.", "Stains, odour and everyday wear."),
-    done: t("Pranie tapicerki, neutralizacja zapachu, suszenie.", "Upholstery wash, odour neutralisation, drying."),
-    result: t("Odświeżony materiał, czystszy wygląd i mebel gotowy do użytku.", "Refreshed fabric, cleaner look, ready to use."),
-    before: "/cleaning/service-upholstery.jpg",
-    after: "/cleaning/service-carpet.jpg",
-  },
-  {
-    id: "po-remoncie-mieszkanie",
-    category: "po-remoncie",
-    categoryLabel: t("Po remoncie", "Post-reno"),
-    title: t("Sprzątanie mieszkania po remoncie", "Apartment clean after renovation"),
-    meta: "Poznań · Jeżyce",
-    problem: t("Pył budowlany, zabrudzone powierzchnie i trudno dostępne miejsca.", "Construction dust, dirty surfaces and hard-to-reach spots."),
-    done: t("Usunięcie pyłu, czyszczenie detali, mycie powierzchni.", "Dust removal, detail cleaning, surface washing."),
-    result: t("Mieszkanie gotowe do wprowadzenia.", "Apartment ready to move in."),
-    before: "/cleaning/service-reno.jpg",
-    after: "/cleaning/hero-main.jpg",
-  },
-  {
-    id: "biuro-poniedzialek",
-    category: "biuro",
-    categoryLabel: t("Biuro", "Office"),
-    title: t("Odświeżenie biura przed poniedziałkiem", "Office refresh before Monday"),
-    meta: "Poznań · Centrum",
-    problem: t("Kurz, ślady użytkowania i nieuporządkowana przestrzeń.", "Dust, wear marks and a cluttered space."),
-    done: t("Sprzątanie stanowisk, podłóg, kuchni i sanitariatów.", "Desks, floors, kitchen and restrooms."),
-    result: t("Czysta, reprezentacyjna przestrzeń dla zespołu i klientów.", "Clean, presentable space for team and clients."),
-    before: "/cleaning/service-office.jpg",
-    after: "/cleaning/service-subscription.jpg",
-  },
-  {
-    id: "mieszkanie-generalne",
-    category: "mieszkanie",
-    categoryLabel: t("Mieszkanie", "Apartment"),
-    title: t("Generalne sprzątanie mieszkania", "General apartment cleaning"),
-    meta: "Poznań · Wilda",
-    problem: t("Nagromadzony kurz, zabrudzenia w kuchni i łazience.", "Built-up dust, kitchen and bathroom grime."),
-    done: t("Dokładne sprzątanie powierzchni, kuchni, łazienki i podłóg.", "Thorough surfaces, kitchen, bathroom and floors."),
-    result: t("Świeże, czyste i komfortowe mieszkanie.", "Fresh, clean and comfortable apartment."),
-    before: "/cleaning/service-house.jpg",
-    after: "/cleaning/service-apartment.jpg",
-  },
-  {
-    id: "tapicerka-krzesla",
-    category: "tapicerka",
-    categoryLabel: t("Tapicerka", "Upholstery"),
-    title: t("Pranie krzeseł i materaca", "Chairs and mattress wash"),
-    meta: "Poznań · Naramowice",
-    problem: t("Zabrudzenia, kurz i nieprzyjemny zapach.", "Dirt, dust and unpleasant odour."),
-    done: t("Czyszczenie ekstrakcyjne, odświeżenie tkanin, suszenie.", "Extraction cleaning, fabric refresh, drying."),
-    result: t("Czystsze tekstylia i większy komfort użytkowania.", "Cleaner textiles and more comfort."),
-    before: "/cleaning/service-carpet.jpg",
-    after: "/cleaning/service-upholstery.jpg",
-  },
-  {
-    id: "przeprowadzka-wyprowadzka",
-    category: "przeprowadzka",
-    categoryLabel: t("Przeprowadzka", "Moving"),
-    title: t("Przygotowanie mieszkania po wyprowadzce", "Apartment prep after move-out"),
-    meta: "Poznań · Łazarz",
-    problem: t("Zabrudzenia po wyniesieniu rzeczy i ślady użytkowania.", "Dirt after moving out and wear marks."),
-    done: t("Sprzątanie końcowe, odświeżenie powierzchni, przygotowanie lokalu.", "Final clean, surface refresh, unit prep."),
-    result: t("Mieszkanie gotowe do oddania lub wynajmu.", "Ready to hand over or rent out."),
-    before: "/cleaning/service-moving.jpg",
-    after: "/cleaning/hero-side-1.jpg",
-  },
-  {
-    id: "po-remoncie-okna",
-    category: "po-remoncie",
-    categoryLabel: t("Po remoncie", "Post-reno"),
-    title: t("Czyszczenie okien i powierzchni po pracach", "Windows and surfaces after works"),
-    meta: "Poznań · Stary Rynek",
-    problem: t("Pył, smugi, resztki materiałów budowlanych.", "Dust, smudges, leftover building materials."),
-    done: t("Mycie okien, ram, parapetów i powierzchni.", "Windows, frames, sills and surfaces."),
-    result: t("Jasna, czysta przestrzeń bez śladów remontu.", "Bright, clean space with no trace of the renovation."),
-    before: "/cleaning/service-reno.jpg",
-    after: "/cleaning/about-mission.jpg",
-  },
-  {
-    id: "biuro-regularne",
-    category: "biuro",
-    categoryLabel: t("Biuro", "Office"),
-    title: t("Regularne sprzątanie lokalu usługowego", "Regular service-venue cleaning"),
-    meta: "Poznań · Winogrady",
-    problem: t("Codzienne zabrudzenia i potrzeba utrzymania standardu.", "Daily dirt and the need to keep a standard."),
-    done: t("Sprzątanie powierzchni, podłóg, zaplecza i strefy klienta.", "Surfaces, floors, back-office and client area."),
-    result: t("Lokal gotowy na przyjęcie klientów.", "Venue ready to welcome clients."),
-    before: "/cleaning/service-office.jpg",
-    after: "/cleaning/hero-side-2.jpg",
-  },
+const PAIRS: Pair[] = [
+  { id: "ba-1", before: "/cleaning/ba-1-before.jpg", after: "/cleaning/ba-1-after.jpg" },
+  { id: "ba-2", before: "/cleaning/ba-2-before.jpg", after: "/cleaning/ba-2-after.jpg" },
+  { id: "ba-3", before: "/cleaning/ba-3-before.jpg", after: "/cleaning/ba-3-after.jpg" },
+  { id: "ba-4", before: "/cleaning/ba-4-before.jpg", after: "/cleaning/ba-4-after.jpg" },
+  { id: "ba-5", before: "/cleaning/ba-5-before.jpg", after: "/cleaning/ba-5-after.jpg" },
+  { id: "ba-6", before: "/cleaning/ba-6-before.jpg", after: "/cleaning/ba-6-after.jpg" },
+  { id: "ba-7", before: "/cleaning/ba-7-before.jpg", after: "/cleaning/ba-7-after.jpg" },
+  { id: "ba-8", before: "/cleaning/ba-8-before.jpg", after: "/cleaning/ba-8-after.jpg" },
 ];
 
 /* ---------- before/after slider (pointer + touch + keyboard) ---------- */
@@ -224,28 +113,20 @@ function BaSlider({
     <div
       ref={containerRef}
       onPointerDown={onPointerDown}
-      className="ba-slider relative w-full cursor-ew-resize select-none overflow-hidden bg-cream-deep"
-      style={{ aspectRatio: "4/3", touchAction: "none" }}
+      className="ba-slider relative w-full cursor-ew-resize select-none overflow-hidden rounded-3xl bg-cream-deep shadow-card"
+      style={{ aspectRatio: "3/4", touchAction: "none" }}
     >
       {/* AFTER (full) */}
-      <SafeImage src={after} alt={afterLabel} ratio="4/3" className="absolute inset-0 h-full w-full" />
+      <SafeImage src={after} alt={afterLabel} ratio="3/4" className="absolute inset-0 h-full w-full" />
 
-      {/* BEFORE (clipped from the left, slightly dimmed to read as "dirty") */}
+      {/* BEFORE (clipped from the left, shown as-is) */}
       <div
         ref={beforeRef}
         className="absolute inset-0 will-change-[clip-path] [transform:translateZ(0)] [backface-visibility:hidden]"
         style={{ clipPath: `inset(0 ${100 - START_POS}% 0 0)` }}
         aria-hidden
       >
-        <SafeImage
-          src={before}
-          alt={beforeLabel}
-          ratio="4/3"
-          tone="cream"
-          className="absolute inset-0 h-full w-full [filter:grayscale(0.28)_brightness(0.8)_contrast(1.03)]"
-        />
-        {/* plain dark wash (no mix-blend — far cheaper to repaint on mobile) */}
-        <div className="absolute inset-0 bg-burgundy-900/30" />
+        <SafeImage src={before} alt={beforeLabel} ratio="3/4" className="absolute inset-0 h-full w-full" />
       </div>
 
       {/* badges */}
@@ -281,183 +162,105 @@ function BaSlider({
   );
 }
 
-/* ---------- case card ---------- */
-
-function CaseCard({ item }: { item: CaseItem }) {
-  const { pick } = useI18n();
-  const waUrl = buildWhatsAppUrl(
-    pick({
-      pl: `Dzień dobry Elart Cleaning! Chcę taki efekt jak w realizacji „${item.title.pl}". Czy możecie przygotować wycenę?`,
-      en: `Hello Elart Cleaning! I want a result like in your "${item.title.en}" case. Could you prepare a quote?`,
-    }),
-  );
-
-  const rows: { label: Bi; value: Bi }[] = [
-    { label: t("Problem", "Problem"), value: item.problem },
-    { label: t("Wykonano", "Done"), value: item.done },
-    { label: t("Efekt", "Result"), value: item.result },
-  ];
-
-  return (
-    <article className="flex flex-col overflow-hidden rounded-4xl border border-ink/8 bg-surface shadow-card">
-      <BaSlider
-        before={item.before}
-        after={item.after}
-        beforeLabel={pick(UI.before)}
-        afterLabel={pick(UI.after)}
-      />
-      <div className="flex flex-1 flex-col gap-4 p-6 md:p-7">
-        <div className="flex items-center justify-between gap-3">
-          <Chip tone="cream">{pick(item.categoryLabel)}</Chip>
-          <span className="text-label-2 font-bold uppercase tracking-wider text-ink/45">{item.meta}</span>
-        </div>
-
-        <h3 className="font-display text-[1.35rem] font-bold leading-[1.1] tracking-[-0.01em] text-ink text-balance">
-          {pick(item.title)}
-        </h3>
-
-        <dl className="flex flex-1 flex-col gap-3 border-t border-ink/8 pt-4">
-          {rows.map((r, i) => (
-            <div key={i} className="grid grid-cols-[5.5rem_1fr] gap-3">
-              <dt className="text-label-1 font-bold uppercase tracking-wider text-burgundy-700">{pick(r.label)}</dt>
-              <dd className="text-b3 leading-snug text-ink/72">{pick(r.value)}</dd>
-            </div>
-          ))}
-        </dl>
-
-        <PrimaryButton href={waUrl} target="_blank" rel="noopener" size="md" className="mt-1 self-start">
-          {pick(UI.iWantThis)}
-        </PrimaryButton>
-      </div>
-    </article>
-  );
-}
-
 /* ---------- section ---------- */
-
-const INITIAL_COUNT = 2;
 
 export function BeforeAfter() {
   const { pick } = useI18n();
-  const [active, setActive] = React.useState("all");
-  const [expanded, setExpanded] = React.useState(false);
+  const trackRef = React.useRef<HTMLDivElement>(null);
+  const [index, setIndex] = React.useState(0);
 
-  const selectFilter = (id: string) => {
-    setActive(id);
-    setExpanded(false); // collapse again when the filter changes
-  };
+  const goTo = React.useCallback((i: number) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const clamped = Math.max(0, Math.min(PAIRS.length - 1, i));
+    const child = track.children[clamped] as HTMLElement | undefined;
+    if (child) track.scrollTo({ left: child.offsetLeft - track.offsetLeft, behavior: "smooth" });
+  }, []);
 
-  const filtered = active === "all" ? CASES : CASES.filter((c) => c.category === active);
-  const visible = expanded ? filtered : filtered.slice(0, INITIAL_COUNT);
-  const hidden = filtered.length - visible.length;
-
-  const finalWa = buildWhatsAppUrl(
-    pick({
-      pl: "Dzień dobry Elart Cleaning! Wysyłam zdjęcie — proszę o ocenę zakresu pracy i wycenę.",
-      en: "Hello Elart Cleaning! I'm sending a photo — please assess the scope of work and quote.",
-    }),
-  );
+  const onScroll = React.useCallback(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    let closest = 0;
+    let min = Infinity;
+    Array.from(track.children).forEach((c, i) => {
+      const d = Math.abs((c as HTMLElement).offsetLeft - track.offsetLeft - track.scrollLeft);
+      if (d < min) {
+        min = d;
+        closest = i;
+      }
+    });
+    setIndex(closest);
+  }, []);
 
   return (
     <section id="efekty" className="bg-cream py-section-lg">
-      <Container className="space-y-10 md:space-y-12">
+      <Container className="space-y-8 md:space-y-10">
         {/* heading */}
         <div className="flex flex-col items-center gap-5 text-center">
           <Chip>{pick(t("Efekty przed i po", "Before & after"))}</Chip>
           <h2 className="font-display text-[clamp(2.25rem,6vw,5rem)] font-bold uppercase leading-[0.9] tracking-[-0.02em] text-ink text-balance">
             {pick(t("Efekty przed i po", "Before & after"))}
           </h2>
-          <p className="max-w-col-5 text-b1 leading-relaxed text-ink/64">
-            {pick(
-              t(
-                "Zobacz realne rezultaty sprzątania, chemicznego prania tapicerki i przygotowania pomieszczeń. Przesuń suwak, aby porównać stan przed i po naszej pracy.",
-                "See real results of cleaning, upholstery washing and room prep. Drag the slider to compare the state before and after our work.",
-              ),
-            )}
-          </p>
         </div>
 
-        {/* filters */}
-        <div className="flex flex-wrap justify-center gap-2">
-          {FILTERS.map((f) => (
-            <button
-              key={f.id}
-              type="button"
-              onClick={() => selectFilter(f.id)}
-              aria-pressed={active === f.id}
-              className={cn(
-                "rounded-full border px-4 py-2 text-b3 font-semibold transition",
-                active === f.id
-                  ? "border-ink bg-ink text-paper"
-                  : "border-ink/10 bg-surface text-ink hover:border-ink/40",
-              )}
+        {/* slider track */}
+        <div
+          ref={trackRef}
+          onScroll={onScroll}
+          className="-mx-4 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth px-4 pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:px-0"
+        >
+          {PAIRS.map((p) => (
+            <div
+              key={p.id}
+              className="w-[82%] shrink-0 snap-center sm:w-[360px] lg:w-[400px]"
             >
-              {pick(f.label)}
-            </button>
-          ))}
-        </div>
-
-        {/* cards */}
-        <FadeUp className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          {visible.map((item) => (
-            <CaseCard key={item.id} item={item} />
-          ))}
-        </FadeUp>
-
-        {/* show more / less */}
-        {filtered.length > INITIAL_COUNT && (
-          <div className="flex justify-center">
-            <button
-              type="button"
-              onClick={() => setExpanded((v) => !v)}
-              className="inline-flex items-center gap-2 rounded-full border border-ink/15 bg-surface px-6 py-3 text-b3 font-bold uppercase tracking-wide text-ink transition hover:border-ink/40 active:scale-[0.98]"
-            >
-              {expanded
-                ? pick(t("Pokaż mniej", "Show less"))
-                : pick(t(`Pokaż więcej (${hidden})`, `Show more (${hidden})`))}
-              <ChevronDown
-                size={18}
-                strokeWidth={2.2}
-                className={cn("transition-transform duration-300", expanded && "rotate-180")}
+              <BaSlider
+                before={p.before}
+                after={p.after}
+                beforeLabel={pick(UI.before)}
+                afterLabel={pick(UI.after)}
               />
-            </button>
-          </div>
-        )}
-
-        {/* final CTA */}
-        <div className="relative overflow-hidden rounded-4xl border border-ink/8 bg-gradient-to-br from-burgundy-800 via-burgundy-800 to-burgundy-900 px-6 py-10 md:px-12 md:py-12">
-          <div
-            aria-hidden
-            className="absolute inset-0 opacity-[0.12]"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at 18% 20%, #CCB170 0, transparent 42%), radial-gradient(circle at 82% 85%, #CCB170 0, transparent 38%)",
-            }}
-          />
-          <div className="relative flex flex-col items-center gap-6 text-center md:flex-row md:justify-between md:text-left">
-            <div className="max-w-col-5 space-y-2">
-              <h3 className="font-display text-[clamp(1.5rem,3.2vw,2.25rem)] font-bold leading-tight text-paper text-balance">
-                {pick(t("Chcesz zobaczyć taki efekt u siebie?", "Want a result like this at your place?"))}
-              </h3>
-              <p className="text-b2 leading-relaxed text-paper/72">
-                {pick(
-                  t(
-                    "Napisz do nas i wyślij zdjęcie — ocenimy zakres pracy.",
-                    "Message us and send a photo — we'll assess the scope of work.",
-                  ),
-                )}
-              </p>
             </div>
-            <PrimaryButton
-              href={finalWa}
-              target="_blank"
-              rel="noopener"
-              size="lg"
-              icon={<MessageCircle size={16} strokeWidth={2.4} />}
-            >
-              {pick(t("Wyślij zdjęcie przez WhatsApp", "Send a photo via WhatsApp"))}
-            </PrimaryButton>
+          ))}
+        </div>
+
+        {/* controls: arrows + dots */}
+        <div className="flex items-center justify-center gap-5">
+          <button
+            type="button"
+            onClick={() => goTo(index - 1)}
+            disabled={index === 0}
+            aria-label={pick(t("Poprzedni", "Previous"))}
+            className="grid h-11 w-11 place-items-center rounded-full border border-ink/15 bg-surface text-ink transition hover:border-ink/40 disabled:opacity-30 active:scale-95"
+          >
+            <ChevronLeft size={20} />
+          </button>
+
+          <div className="flex items-center gap-2">
+            {PAIRS.map((p, i) => (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => goTo(i)}
+                aria-label={`${i + 1}`}
+                aria-current={i === index}
+                className={cn(
+                  "h-2 rounded-full transition-all duration-300",
+                  i === index ? "w-6 bg-ink" : "w-2 bg-ink/25 hover:bg-ink/40",
+                )}
+              />
+            ))}
           </div>
+
+          <button
+            type="button"
+            onClick={() => goTo(index + 1)}
+            disabled={index === PAIRS.length - 1}
+            aria-label={pick(t("Następny", "Next"))}
+            className="grid h-11 w-11 place-items-center rounded-full border border-ink/15 bg-surface text-ink transition hover:border-ink/40 disabled:opacity-30 active:scale-95"
+          >
+            <ChevronRight size={20} />
+          </button>
         </div>
       </Container>
     </section>

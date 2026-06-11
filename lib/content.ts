@@ -176,6 +176,50 @@ export const SERVICES = [
   },
 ];
 
+/** Headline price + note per service slug, for the service detail popup. */
+export const SERVICE_PRICE: Record<string, { price: Bi; note: Bi }> = {
+  mieszkania: {
+    price: t("od 179 zł", "from 179 zł"),
+    note: t("wycena dobierana do metrażu i zakresu", "tailored to area and scope"),
+  },
+  domy: {
+    price: t("od 179 zł", "from 179 zł"),
+    note: t("parter, piętra, garaż i taras", "ground floor, upstairs, garage and terrace"),
+  },
+  "po-remoncie": {
+    price: t("od 7 zł/m²", "from 7 zł/m²"),
+    note: t("12 zł/m² przy ciężkich zabrudzeniach", "12 zł/m² for heavy soiling"),
+  },
+  biura: {
+    price: t("od 7 zł/m²", "from 7 zł/m²"),
+    note: t("Premium 21–32 zł/m² (generalne + chemia)", "Premium 21–32 zł/m² (deep + chemistry)"),
+  },
+  tapicerka: {
+    price: t("od 200 zł", "from 200 zł"),
+    note: t("sofa 2-os. 200 zł · narożnik od 250 zł", "2-seat sofa 200 zł · corner from 250 zł"),
+  },
+  dywany: {
+    price: t("od 18 zł/m²", "from 18 zł/m²"),
+    note: t("długie włosie od 25 zł/m² · z odbiorem", "long pile from 25 zł/m² · with pickup"),
+  },
+  okna: {
+    price: t("od 30 zł / okno", "from 30 zł / window"),
+    note: t("komercyjne od 6 zł/m² · praca na wysokości", "commercial from 6 zł/m² · work at height"),
+  },
+  transport: {
+    price: t("wycena indywidualna", "individual quote"),
+    note: t("Poznań i cała Polska · montaż w cenie", "Poznań and all of Poland · assembly included"),
+  },
+  magazyn: {
+    price: t("wycena indywidualna", "individual quote"),
+    note: t("obiekt strzeżony i ogrzewany", "guarded and heated facility"),
+  },
+  abonament: {
+    price: t("oferta indywidualna", "individual offer"),
+    note: t("korzystne stawki i pierwszeństwo terminów", "preferred rates and priority booking"),
+  },
+};
+
 export const PRICES = [
   {
     key: "apt",

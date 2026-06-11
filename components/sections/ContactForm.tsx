@@ -12,6 +12,7 @@ import { FORM, HEADINGS, SERVICES, UI } from "@/lib/content";
 import { BRAND } from "@/lib/constants";
 import { useI18n } from "@/lib/i18n";
 import { buildMailto, buildWhatsAppUrl, defaultQuoteMessage } from "@/lib/whatsapp";
+import { sendLead } from "@/lib/lead";
 import { cn } from "@/lib/utils";
 
 const schema = z.object({
@@ -20,6 +21,7 @@ const schema = z.object({
   email: z.string().email(),
   service: z.string().min(1),
   message: z.string().min(5),
+  company: z.string().optional(), // honeypot
   rodo: z.literal(true),
 });
 type Values = z.infer<typeof schema>;
@@ -35,7 +37,22 @@ export function ContactForm() {
     formState: { errors, isSubmitting },
   } = useForm<Values>({ resolver: zodResolver(schema), defaultValues: { rodo: false as unknown as true } });
 
-  const onSubmit = (data: Values) => {
+  const onSubmit = async (data: Values) => {
+    const ok = await sendLead({
+      name: data.name,
+      phone: data.phone,
+      email: data.email,
+      service: data.service,
+      message: data.message,
+      source: "Formularz kontaktowy",
+      company: data.company,
+    });
+    if (ok) {
+      setState("ok");
+      reset();
+      return;
+    }
+    // Fallback so the lead is never lost (also covers local dev without PHP).
     try {
       const subject = `Elart Cleaning — ${data.service}`;
       const body = `${pick(FORM.name)}: ${data.name}\n${pick(FORM.phone)}: ${data.phone}\n${pick(FORM.email)}: ${data.email}\n${pick(FORM.service)}: ${data.service}\n\n${pick(FORM.message)}:\n${data.message}`;
@@ -123,6 +140,15 @@ export function ContactForm() {
             onSubmit={handleSubmit(onSubmit)}
             className="space-y-5 rounded-3xl bg-paper text-ink p-7 md:p-10 lg:p-12 shadow-card border border-paper/10"
           >
+            {/* honeypot — hidden from humans, catches bots */}
+            <input
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden
+              {...register("company")}
+              className="absolute left-[-9999px] h-0 w-0 opacity-0"
+            />
             <div className="grid md:grid-cols-2 gap-4">
               <Field label={pick(FORM.name)} error={errors.name && pick(FORM.required)}>
                 <input type="text" autoComplete="name" {...register("name")} className={inputCls} />

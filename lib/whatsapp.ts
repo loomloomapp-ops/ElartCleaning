@@ -29,6 +29,18 @@ export function packageQuoteMessage(
   return `Dzień dobry Elart Cleaning, interesuje mnie pakiet „${name}” (${price}). Czy możecie przygotować dla mnie wycenę?`;
 }
 
+export function serviceQuoteMessage(
+  service: string,
+  price?: string,
+  lang: "pl" | "en" = "pl",
+): string {
+  const pricePart = price ? ` (${price})` : "";
+  if (lang === "en") {
+    return `Hello Elart Cleaning, I'm interested in: ${service}${pricePart}. Could you prepare a quote for me?`;
+  }
+  return `Dzień dobry Elart Cleaning, interesuje mnie: ${service}${pricePart}. Czy możecie przygotować dla mnie wycenę?`;
+}
+
 export type QuizAnswers = {
   service: string;
   object: string;

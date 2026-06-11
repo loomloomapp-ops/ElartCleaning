@@ -2,7 +2,7 @@
 
 import { Target, Eye, Sparkles, ArrowRight } from "lucide-react";
 import { Container, Eyebrow, GoldDivider } from "@/components/primitives";
-import { SafeImage } from "@/components/primitives/SafeImage";
+import { ParallaxImage } from "@/components/primitives/ParallaxImage";
 import { FadeUp } from "@/components/motion";
 import { SecondaryButton } from "@/components/cta";
 import { ABOUT, HEADINGS, UI } from "@/lib/content";
@@ -27,11 +27,11 @@ export function About() {
         <FadeUp className="relative">
           {/* Top image with counter chip overlaid */}
           <div className="relative overflow-hidden rounded-[1.5rem] mb-4 md:mb-5">
-            <SafeImage
+            <ParallaxImage
               src={STOCK.about.top}
               alt="Elart Cleaning crew at work"
-              ratio="16/9"
-              className="rounded-[1.5rem]"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="aspect-[16/9] rounded-[1.5rem]"
             />
             <div className="absolute right-4 bottom-4 md:right-6 md:bottom-6 inline-flex items-center gap-4 rounded-2xl bg-paper text-ink shadow-card border border-ink/5 px-5 py-4">
               <div className="font-display text-4xl md:text-5xl leading-none text-burgundy-700 tabular-nums">
@@ -45,11 +45,11 @@ export function About() {
 
           {/* Bottom tall image with sparkle accent */}
           <div className="relative overflow-hidden rounded-[1.5rem]">
-            <SafeImage
+            <ParallaxImage
               src={STOCK.about.bottom}
               alt="Detail of cleaning work"
-              ratio="4/3"
-              className="rounded-[1.5rem]"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="aspect-[4/3] rounded-[1.5rem]"
             />
             {/* Sparkle accent */}
             <span

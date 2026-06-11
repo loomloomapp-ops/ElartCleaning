@@ -9,6 +9,7 @@ import { PrimaryButton, SecondaryButton } from "@/components/cta";
 import { QUIZ, HEADINGS } from "@/lib/content";
 import { useI18n } from "@/lib/i18n";
 import { buildQuizMessage, buildWhatsAppUrl, buildMailto, type QuizAnswers } from "@/lib/whatsapp";
+import { sendLead } from "@/lib/lead";
 import { cn } from "@/lib/utils";
 
 type State = {
@@ -101,11 +102,30 @@ export function QuizSection() {
     };
   };
 
+  const fireLead = () => {
+    const a = build();
+    // Fire-and-forget — the team gets a structured lead in Telegram regardless
+    // of which channel the visitor finishes through.
+    void sendLead({
+      name: a.name,
+      phone: a.phone,
+      email: a.email,
+      service: a.service,
+      object: a.object,
+      area: a.area,
+      timing: a.timing,
+      extras: a.extras,
+      message: a.message,
+      source: "Quiz wyceny",
+    });
+  };
+
   const submitWhatsApp = () => {
     if (!canAdvance()) {
       setS({ ...s, err: contactError });
       return;
     }
+    fireLead();
     const msg = buildQuizMessage(build(), lang);
     window.open(buildWhatsAppUrl(msg), "_blank", "noopener");
   };
@@ -115,6 +135,7 @@ export function QuizSection() {
       setS({ ...s, err: contactError });
       return;
     }
+    fireLead();
     const msg = buildQuizMessage(build(), lang);
     window.location.href = buildMailto(pick(QUIZ.title), msg);
   };
