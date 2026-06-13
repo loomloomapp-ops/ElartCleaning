@@ -26,14 +26,14 @@ export const STOCK = {
   services: {
     mieszkania: "/cleaning/service-mieszkania.jpg",
     domy: "/cleaning/service-domy.jpg",
-    "po-remoncie": "/cleaning/service-reno.jpg",
+    "po-remoncie": "/cleaning/service-po-remoncie.jpg",
     biura: "/cleaning/service-biura.jpg",
     tapicerka: "/cleaning/service-tapicerka.jpg",
-    dywany: "/cleaning/service-carpet.jpg",
+    dywany: "/cleaning/service-dywany.jpg",
     okna: "/cleaning/service-okna.jpg",
-    transport: "/cleaning/service-moving.jpg",
-    magazyn: "/cleaning/about-extra.avif",
-    abonament: "/cleaning/service-subscription.jpg",
+    transport: "/cleaning/service-transport.jpg",
+    magazyn: "/cleaning/service-magazyn.jpg",
+    abonament: "/cleaning/service-abonament.jpg",
   },
 
   // 4 why-us alternating rows

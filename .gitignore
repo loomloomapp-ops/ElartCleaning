@@ -8,3 +8,7 @@ next-env.d.ts
 
 # Telegram relay with secret token (deploy manually, never commit)
 public/send-telegram.php
+
+# local deploy artifacts
+elart-hostinger.zip
+elart-hostinger/
