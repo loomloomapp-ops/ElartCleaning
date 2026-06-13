@@ -104,9 +104,9 @@ export function QuizSection() {
 
   const fireLead = () => {
     const a = build();
-    // Fire-and-forget — the team gets a structured lead in Telegram regardless
-    // of which channel the visitor finishes through.
-    void sendLead({
+    // The team gets a structured lead in Telegram regardless of which channel
+    // the visitor finishes through.
+    return sendLead({
       name: a.name,
       phone: a.phone,
       email: a.email,
@@ -120,14 +120,15 @@ export function QuizSection() {
     });
   };
 
-  const submitWhatsApp = () => {
+  const submitWhatsApp = async () => {
     if (!canAdvance()) {
       setS({ ...s, err: contactError });
       return;
     }
-    fireLead();
+    await fireLead();
     const msg = buildQuizMessage(build(), lang);
     window.open(buildWhatsAppUrl(msg), "_blank", "noopener");
+    window.location.href = "/dziekujemy/";
   };
 
   const submitEmail = () => {
@@ -135,7 +136,7 @@ export function QuizSection() {
       setS({ ...s, err: contactError });
       return;
     }
-    fireLead();
+    void fireLead();
     const msg = buildQuizMessage(build(), lang);
     window.location.href = buildMailto(pick(QUIZ.title), msg);
   };

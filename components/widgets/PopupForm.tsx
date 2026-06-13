@@ -34,7 +34,6 @@ export function PopupForm({
   onOpenChange: (v: boolean) => void;
 }) {
   const { pick, lang } = useI18n();
-  const [submitted, setSubmitted] = React.useState<"idle" | "ok" | "err">("idle");
 
   const {
     register,
@@ -52,24 +51,15 @@ export function PopupForm({
       source: "Popup — szybka wycena",
       company: data.company,
     });
-    if (ok) {
-      setSubmitted("ok");
-      reset();
-      setTimeout(() => onOpenChange(false), 1500);
-      return;
-    }
-    // Fallback so the lead still reaches the team (and for local dev w/o PHP).
-    try {
+    if (!ok) {
+      // Fallback so the lead still reaches the team (and for local dev w/o PHP).
       const msg = `${pick(POPUP.title)} — ${data.name}\n${pick(FORM.phone)}: ${data.phone}` +
         (data.email ? `\n${pick(FORM.email)}: ${data.email}` : "") +
         (data.message ? `\n${pick(FORM.message)}: ${data.message}` : "");
       window.open(buildWhatsAppUrl(msg), "_blank", "noopener");
-      setSubmitted("ok");
-      reset();
-      setTimeout(() => onOpenChange(false), 1500);
-    } catch {
-      setSubmitted("err");
     }
+    reset();
+    window.location.href = "/dziekujemy/";
   };
 
   return (
@@ -173,17 +163,6 @@ export function PopupForm({
                   </label>
                   {errors.rodo && (
                     <p className="text-xs text-burgundy-700">{pick(FORM.required)}</p>
-                  )}
-
-                  {submitted === "ok" && (
-                    <div className="rounded-2xl bg-cream p-3 text-sm text-ink">
-                      {pick(FORM.success)}
-                    </div>
-                  )}
-                  {submitted === "err" && (
-                    <div className="rounded-2xl bg-burgundy-700/10 p-3 text-sm text-burgundy-700">
-                      {pick(FORM.error)}
-                    </div>
                   )}
 
                   <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">

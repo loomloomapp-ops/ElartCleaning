@@ -28,7 +28,6 @@ type Values = z.infer<typeof schema>;
 
 export function ContactForm() {
   const { pick, lang } = useI18n();
-  const [state, setState] = React.useState<"idle" | "ok" | "err">("idle");
 
   const {
     register,
@@ -47,21 +46,14 @@ export function ContactForm() {
       source: "Formularz kontaktowy",
       company: data.company,
     });
-    if (ok) {
-      setState("ok");
-      reset();
-      return;
-    }
-    // Fallback so the lead is never lost (also covers local dev without PHP).
-    try {
+    if (!ok) {
+      // Fallback so the lead is never lost (also covers local dev without PHP).
       const subject = `Elart Cleaning — ${data.service}`;
       const body = `${pick(FORM.name)}: ${data.name}\n${pick(FORM.phone)}: ${data.phone}\n${pick(FORM.email)}: ${data.email}\n${pick(FORM.service)}: ${data.service}\n\n${pick(FORM.message)}:\n${data.message}`;
-      window.location.href = buildMailto(subject, body);
-      setState("ok");
-      reset();
-    } catch {
-      setState("err");
+      window.open(buildMailto(subject, body), "_blank");
     }
+    reset();
+    window.location.href = "/dziekujemy/";
   };
 
   return (
@@ -185,13 +177,6 @@ export function ContactForm() {
               <span>{pick(FORM.rodo)}</span>
             </label>
             {errors.rodo && <p className="text-xs text-burgundy-700">{pick(FORM.required)}</p>}
-
-            {state === "ok" && (
-              <div className="rounded-2xl bg-cream p-3 text-sm text-ink">{pick(FORM.success)}</div>
-            )}
-            {state === "err" && (
-              <div className="rounded-2xl bg-burgundy-700/10 p-3 text-sm text-burgundy-700">{pick(FORM.error)}</div>
-            )}
 
             <div className="pt-2">
               <PrimaryButton type="submit" disabled={isSubmitting}>
