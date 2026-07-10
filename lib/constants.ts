@@ -1,8 +1,8 @@
 export const BRAND = {
   name: "Elart Cleaning",
   city: "Poznań",
-  phone: "+48 577 596 668",
-  phoneTel: "+48577596668",
+  phone: "+48 577 228 258",
+  phoneTel: "+48577228258",
   whatsapp: "48577596668",
   email: "elartcleaning@gmail.com",
   instagram: "https://www.instagram.com/elart_cleaning/",
